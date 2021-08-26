@@ -3,17 +3,23 @@
 import discord
 from discord.ext import commands
 import random
+from discord.flags import Intents
 import praw
+
+
+intents = discord.Intents.default()
+intents.members = True
 
 client = commands.Bot(command_prefix='~~',
                       help_command=None,
-                      case_insensitive=True)
+                      case_insensitive=True,
+                      intents=intents)
 
 
 @client.event
 async def on_ready():
   print("Bot Online.")
-  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Home Alone 3"))
+  await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="over this place ^^"))
 
 
 @client.event
@@ -23,6 +29,32 @@ async def on_message(message):
     await client.process_commands(message)
 
 
+@client.event
+async def on_member_join(member):
+    welcome_mesej = f"""
+Heyo! Welcome {member.mention}^^<:yay:870286126085189672>
+
+Our server is a place where you will feel safe! We play with the bots, listen to music, watch movies together and most importantly get to know each other and have fun! We also have different fandoms which you may like! <a:qblob_happy:880153476770975754>
+
+<:check:880300080639385601> check out:
+<a:sparkly:880300039870775306> | <#869849124537778208>
+<a:sparkly:880300039870775306> | <#872748526759735367>
+<a:sparkly:880300039870775306> | <#869849124537778207>
+<a:sparkly:880300039870775306> | <#869849124537778209>
+
+And the most important thing... Enjoy!! <a:heart:872760086790012978>
+"""
+    ment = member.mention
+    channel = client.get_channel(869849124537778206)
+    await channel.send(f"Heylo~ {member.mention}")
+    embed = discord.Embed(title="°•Welcome to Safe Haven!!•°",
+                          description=welcome_mesej,
+                          color=discord.Color.from_rgb(73, 131, 179))
+    embed.set_image(url="https://images-ext-2.discordapp.net/external/gQYsepLoX2Q7rx6M-enMVY9xJrjpEGuwU5roJvvOhWU/https/c.tenor.com/M2Wt2o220uMAAAAC/welcome-aesthetic.gif")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
+    await channel.send(embed=embed)
+
+
 @client.command()
 async def staff(ctx):
     embed = discord.Embed(title="Staff",
@@ -30,65 +62,89 @@ async def staff(ctx):
                           timestamp=ctx.message.created_at,
                           color=discord.Color.from_rgb(73, 131, 179))
     embed.set_footer(text=f"Requested by {ctx.author.name}")
+    embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
     await ctx.send(embed=embed)
-    await ctx.message.delete()
 
+
+@client.command()
+async def stats(ctx):
+  member_count = len(ctx.guild.members)
+  true_member_count = len([m for m in ctx.guild.members if not m.bot])
+  bot_count = len([m for m in ctx.guild.members if m.bot])
+  embed = discord.Embed(title='Members',
+                          description=f"Total Members: {member_count} \nMembers: {true_member_count} \nBots: {bot_count}",
+                          timestamp=ctx.message.created_at,
+                          color=discord.Color.from_rgb(73, 131, 179))
+  embed.set_footer(text=f"^-^")
+  await ctx.send(embed=embed)
+
+
+@client.command()
+async def report(ctx, user: discord.User, *, args):
+  channel = client.get_channel(872748526759735368)
+  reporte = discord.Embed(title="User Reported",
+                          description=f"{user} was reported by {ctx.author} \n **Reason**\n {args}",
+                          color=discord.Color.from_rgb(73, 131, 179))
+  await channel.send(embed=reporte)
+  await ctx.send("User reported, check your DMs!")
+  await ctx.author.send("The user was reported! Dm a staff in detail if you would like :D")
+  await ctx.message.delete()
 
 Rules = """
-1. No Swearing
+<a:heartarrow:880131099559358525> No Swearing.
 
-2. You cannot reveal any personal information in this server like credit cards, phone numbers address, and the rest.
+<a:heartarrow:880131099559358525> You cannot reveal any personal information in this server like credit cards, phone numbers address, and the rest.
 
-3. Please respect everyone in this server
+<a:heartarrow:880131099559358525> Please respect everyone in this server.
 
-4. No Racism or sexism allowed in this server (it results to instant ban)
+<a:heartarrow:880131099559358525> No Racism or sexism allowed in this server (it results to instant ban).
 
-5. No NUDES
+<a:heartarrow:880131099559358525> No NUDES.
 
-6. Don't ping anyone in this server if unnecessary.
+<a:heartarrow:880131099559358525> Don't ping anyone in this server if unnecessary.
 
-7. Don't spam unless its an spam channel.
+<a:heartarrow:880131099559358525> Don't spam unless its an spam channel.
 
-8. If a fight happens between you and an member take it to your own DMs this is a SAFE HAVEN no one needs beef in this server. Please dont start a fight
+<a:heartarrow:880131099559358525> If a fight happens between you and an member take it to your own DMs this is a SAFE HAVEN no one needs beef in this server. Please dont start a fight.
 
-9. Keep the bot commands on #bots-fun-1:red_circle: , #bots-fun-2:white_circle: , #bots-fun-3:black_circle: , #:purple_heart:kpop-botz and #:blue_circle:anime-botz
+<a:heartarrow:880131099559358525> Keep the bot commands on <#869849125087240211>:red_circle: , <#869849125401817098>#:white_circle: , <#869849125401817099>:black_circle: , <#869849126102249502> and <#869849126102249508>
 
-Please use the particular channel for the particular thing your doing
+Please use the particular channel for the particular thing your doing.
 
-10. no sex talks and jokes... I hope we keep things pg as kids are here!
+<a:heartarrow:880131099559358525> no sex talks and jokes... I hope we keep things pg as kids are here!
 
 If there's an offensive username or profile photo in this server, you will be asked to change it immediately.
 
-11. Don't spam ping someone.
+<a:heartarrow:880131099559358525> Don't spam ping someone.
 
-12. keep it in the basic language- English. Try not using any other languages.
+<a:heartarrow:880131099559358525> keep it in the basic language- English. Try not using any other languages.
 
-13. Please don't do anything that makes people uncomfortable
+<a:heartarrow:880131099559358525> Please don't do anything that makes people uncomfortable.
 
-14. Don't harass anyone. Both members and staff members.
+<a:heartarrow:880131099559358525> Don't harass anyone. Both members and staff members.
 
 They have been chosen through thorough discussion and fair&square.
 
-15. Any user with no pfps, they will be asked to add one, if they dont, a direct kick
+<a:heartarrow:880131099559358525> Any user with no pfps, they will be asked to add one, if they dont, a direct kick.
 
 
 3 strikes law and here's how it goes:
 
-1. Warning 1 ban for 1 day
+1. Warning 1 ban for 1 day.
 
-2. Warning 2 ban for 2 weeks
+2. Warning 2 ban for 2 weeks.
 
-3. Warning 3 permanent ban
+3. Warning 3 permanent ban.
 
 
-If you guys have any complains or suggestions, you can dm any mod or admin online. We will try fixing the problem or look into your suggestions. Or if it is okay to share, do use the #:heart_exclamation:suggestions channel for it.
+If you guys have any complains or suggestions, you can dm any mod or admin online. We will try fixing the problem or look into your suggestions. Or if it is okay to share, do use the <#869849124856541191> channel for it.
 
 If anyone is breaking the rules, please take a screen shot and ping a staff member!!
 
 
 I hope you stay and enjoy!!!
 
-Thank you on behalf of the Owner, Admins and Mods.
+Thank you on behalf of the Owner, Admins and Mods. <:heartu:870286031822405633>
 """
 @client.command()
 async def rules(ctx):
@@ -117,13 +173,13 @@ staffs = """
 <@840627967696830485>
 <@797056468594458637>
 <@705205126390087710>
+<@613789929134227465>
 <@869917928164835338>
 <@797056468594458637>
 
 **Event Managers**
 
 <@816623527896940604>
-<@613789929134227465>
 <@814580128200785950>
 """
 
@@ -284,25 +340,21 @@ async def _reddit(ctx, *, arg=None):
 
         if mango.over_18:
             embed = discord.Embed(title="Bonk go to horny jail",
-                                  timestamp=ctx.message.created_at,
                                   color=discord.Color.from_rgb(73, 131, 179))
-            # embed.set_footer(text=f"{updoot}⬆")
+            embed.set_footer(text=f"Requested by {ctx.author.name}")
             embed.set_image(
                 url=
                 "https://i.kym-cdn.com/entries/icons/original/000/033/758/Screen_Shot_2020-04-28_at_12.21.48_PM.png"
             )
             await ctx.send(embed=embed)
-            await ctx.message.delete()
 
         else:
             embed = discord.Embed(title=titlee,
-                                  timestamp=ctx.message.created_at,
                                   color=discord.Color.from_rgb(73, 131, 179))
             embed.set_footer(
                 text=f"{updoot}⬆ | Requested by {ctx.author.name}")
             embed.set_image(url=mango.url)
             await ctx.send(embed=embed)
-            await ctx.message.delete()
 
     else:
         await ctx.send("usage: `~~reddit {subreddit}`")
@@ -325,6 +377,9 @@ help_desc = """
 `reddit`
 `8ball`
 `dm`
+`stats`
+`report`
+`rps` rock, paper, scissors
 `help` (shows this command)
 
 `help {command_name}` for more info :D
@@ -357,6 +412,8 @@ async def help(ctx, *, arg = None):
       await ctx.send("usage: `~~giverole/gr @role @user`  Gives mentioned User the role")
     elif arg == "dm":
       await ctx.send("""usage: `~~dm "{anything}" @someone`""" )
+    elif arg == "report":
+      await ctx.send("usage: `~~report @user {reason}")
     else:
       help = discord.Embed(title="Commands",
                          description=help_desc,
@@ -364,38 +421,66 @@ async def help(ctx, *, arg = None):
                          color=discord.Color.from_rgb(73, 131, 179))
       await ctx.send(embed=help)
 
-
-@client.command()
-async def editrole(ctx, role: discord.Role, parmesan):
-  try:
-    await role.edit(permissions=discord.Permissions(brr=True))
-    await ctx.send(f"Permission added")
-  except:
-    await ctx.send("failed~")
-
-
-@client.command()
-async def on_member_join(ctx, member):
-    ment = member.mention
-    await ctx.send(f"{ment} has joined the server.")
-    print(f"{member} has joined the server.")
     
-
 @client.command()
 async def editrules(ctx, msg_id = None, channel: discord.TextChannel = None, *, args=None):
     msg = await channel.fetch_message(msg_id)
     rulesnew = discord.Embed(title="Rules",
-                          description=Rules,
+                          description=f"""{args}""",
                           timestamp=ctx.message.created_at,
                           color=discord.Color.from_rgb(73, 131, 179))
     rulesnew.set_footer(text=f"Requested by {ctx.author.name}")
     await msg.edit(embed=rulesnew)
     await ctx.send("Edited Successfully~ :D")
+    await ctx.message.delete()
 
+
+part_desc="""
+• DM any staff.
+• If your server has under 100 members pinging everyone is absolutely necessary.
+• The server shouldn't encourage raiding/disruptive behaviour and shouldn't be based around NSFW content.
+• If your invite link expires we will delete your server ad unless you reach out to us with a new working invite link.
+"""
 
 @client.command()
-async def test(ctx):
-  await ctx.send("Test message go brr~")
+async def partnership(ctx):
+  if ctx.author.guild_permissions.administrator:
+    partner = discord.Embed(title="➤ PARTNERSHIP REQUIREMENTS",
+                          description=part_desc,
+                          color=discord.Color.from_rgb(73, 131, 179))
+    partner.set_image(url="https://images-ext-2.discordapp.net/external/yrjUrfJHpCtmENHqKHNfRtNu70B2bDV6WamkIngdW-M/https/images-ext-2.discordapp.net/external/-qqulj4HDYbBszc_kJZuG9aiBrN6GtrI5OmjrJE8pPA/https/c.tenor.com/1E-FiOOEbaYAAAAd/green.gif")
+    partner.set_thumbnail(url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
+    await ctx.messsage.delete()
+    await ctx.send (embed=partner) 
+
+
+@client.command(help="Play with .rps [your choice]")
+async def rps(ctx, choice):
+  rpsGame = ['rock', 'paper', 'scissors']
+  comp_choice = random.choice(rpsGame)
+  if choice == 'rock':
+    if comp_choice == 'rock':
+        await ctx.send(f'Well, that was weird. We tied.\nYour choice: {choice}\nMy choice: {comp_choice}')
+    elif comp_choice == 'paper':
+            await ctx.send(f'Nice try, but I won that time!!\nYour choice: {choice}\nMy choice: {comp_choice}')
+    elif comp_choice == 'scissors':
+            await ctx.send(f"Aw, you beat me. It won't happen again!\nYour choice: {choice}\nMy choice: {comp_choice}")
+
+  elif choice == 'paper':
+      if comp_choice == 'rock':
+          await ctx.send(f'The pen beats the sword? More like the paper beats the rock!!\nYour choice: {choice}\nMy choice: {comp_choice}')
+      elif comp_choice == 'paper':
+            await ctx.send(f'Oh, wacky. We just tied. I call a rematch!!\nYour choice: {choice}\nMy choice: {comp_choice}')
+      elif comp_choice == 'scissors':
+            await ctx.send(f"Heh.\nYour choice: {choice}\nMy choice: {comp_choice}")
+
+  elif choice == 'scissors':
+        if comp_choice == 'rock':
+            await ctx.send(f'HAHA!! I JUST CRUSHED YOU!! I rock!!\nYour choice: {choice}\nMy choice: {comp_choice}')
+        elif comp_choice == 'paper':
+            await ctx.send(f'Bruh. >: |\nYour choice: {choice}\nMy choice: {comp_choice}')
+        elif comp_choice == 'scissors':
+            await ctx.send(f"Oh well, we tied.\nYour choice: {choice}\nMy choice: {comp_choice}")
 
 
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
