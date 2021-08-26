@@ -462,7 +462,7 @@ async def partnership(ctx):
                           color=discord.Color.from_rgb(73, 131, 179))
     partner.set_image(url="https://images-ext-2.discordapp.net/external/yrjUrfJHpCtmENHqKHNfRtNu70B2bDV6WamkIngdW-M/https/images-ext-2.discordapp.net/external/-qqulj4HDYbBszc_kJZuG9aiBrN6GtrI5OmjrJE8pPA/https/c.tenor.com/1E-FiOOEbaYAAAAd/green.gif")
     partner.set_thumbnail(url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
-    await ctx.messsage.delete()
+    await ctx.message.delete()
     await ctx.send (embed=partner) 
 
 
