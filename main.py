@@ -55,6 +55,18 @@ And the most important thing... Enjoy!! <a:heart:872760086790012978>
     await channel.send(embed=embed)
 
 
+@client.event
+async def on_member_leave(member):
+  leave_mesej = "goodbye! it is your wish to come back or not but i hope you stay safe!"
+  channel = client.get_channel(869849124537778206)
+  await channel.send(f"{member.mention} has left...")
+  embed = discord.Embed(title=leave_mesej,
+                          color=discord.Color.from_rgb(73, 131, 179))
+  embed.set_image(url="https://images-ext-1.discordapp.net/external/In0Mt5Jq5CYuEkn9KrOHfn3O3oPQZ46UcvPYobgyoqI/https/c.tenor.com/EbLL24T8XIgAAAAC/aesthetic.gif")
+  embed.set_thumbnail(url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
+  await channel.send(embed=embed)
+
+
 @client.command()
 async def staff(ctx):
     embed = discord.Embed(title="Staff",
@@ -481,6 +493,16 @@ async def rps(ctx, choice):
             await ctx.send(f'Bruh. >: |\nYour choice: {choice}\nMy choice: {comp_choice}')
         elif comp_choice == 'scissors':
             await ctx.send(f"Oh well, we tied.\nYour choice: {choice}\nMy choice: {comp_choice}")
+
+
+@client.command()
+async def embed(ctx, titlee, *, descriptions):
+  template = discord.Embed(title=f"{titlee}",
+                          description=descriptions,
+                          timestamp=ctx.message.created_at,
+                          color=discord.Color.from_rgb(73, 131, 179))
+  await ctx.send(embed=template)
+  await ctx.message.delete()
 
 
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
