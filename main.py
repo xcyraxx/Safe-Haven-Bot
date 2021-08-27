@@ -26,6 +26,10 @@ async def on_ready():
 async def on_message(message):
     if client.user.mentioned_in(message):
         await message.channel.send("You can type `~~help` for more info")
+    elif "sus" in message.content:
+      emojis = ['🇦', '🇲', '🇴', '🇬', '🇺', '🇸']
+      for emoji in emojis:
+        await message.add_reaction(emoji) 
     await client.process_commands(message)
 
 
