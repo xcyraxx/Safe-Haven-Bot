@@ -15,6 +15,7 @@ client = commands.Bot(command_prefix='~~',
                       case_insensitive=True,
                       intents=intents)
 
+mod_channel = client.get_channel(869849124537778214)
 
 @client.event
 async def on_ready():
@@ -28,7 +29,7 @@ async def on_message(message):
         await message.channel.send("You can type `~~help` for more info")
     await client.process_commands(message)
 
-    
+
 @client.command()
 async def staff(ctx):
     embed = discord.Embed(title="Staff",
@@ -66,60 +67,33 @@ async def report(ctx, user: discord.User, *, args):
 
 Rules = """
 <a:heartarrow:880131099559358525> No Swearing.
-
 <a:heartarrow:880131099559358525> You cannot reveal any personal information in this server like credit cards, phone numbers address, and the rest.
-
 <a:heartarrow:880131099559358525> Please respect everyone in this server.
-
 <a:heartarrow:880131099559358525> No Racism or sexism allowed in this server (it results to instant ban).
-
 <a:heartarrow:880131099559358525> No NUDES.
-
 <a:heartarrow:880131099559358525> Don't ping anyone in this server if unnecessary.
-
 <a:heartarrow:880131099559358525> Don't spam unless its an spam channel.
-
 <a:heartarrow:880131099559358525> If a fight happens between you and an member take it to your own DMs this is a SAFE HAVEN no one needs beef in this server. Please dont start a fight.
-
 <a:heartarrow:880131099559358525> Keep the bot commands on <#869849125087240211>:red_circle: , <#869849125401817098>#:white_circle: , <#869849125401817099>:black_circle: , <#869849126102249502> and <#869849126102249508>
-
 Please use the particular channel for the particular thing your doing.
-
 <a:heartarrow:880131099559358525> no sex talks and jokes... I hope we keep things pg as kids are here!
-
 If there's an offensive username or profile photo in this server, you will be asked to change it immediately.
-
 <a:heartarrow:880131099559358525> Don't spam ping someone.
-
 <a:heartarrow:880131099559358525> keep it in the basic language- English. Try not using any other languages.
-
 <a:heartarrow:880131099559358525> Please don't do anything that makes people uncomfortable.
-
 <a:heartarrow:880131099559358525> Don't harass anyone. Both members and staff members.
-
 They have been chosen through thorough discussion and fair&square.
-
 <a:heartarrow:880131099559358525> Any user with no pfps, they will be asked to add one, if they dont, a direct kick.
-
-
 3 strikes law and here's how it goes:
-
 1. Warning 1 ban for 1 day.
-
 2. Warning 2 ban for 2 weeks.
-
 3. Warning 3 permanent ban.
-
-
 If you guys have any complains or suggestions, you can dm any mod or admin online. We will try fixing the problem or look into your suggestions. Or if it is okay to share, do use the <#869849124856541191> channel for it.
-
 If anyone is breaking the rules, please take a screen shot and ping a staff member!!
-
-
 I hope you stay and enjoy!!!
-
 Thank you on behalf of the Owner, Admins and Mods. <:heartu:870286031822405633>
 """
+
 @client.command()
 async def rules(ctx):
     embed = discord.Embed(title="Rules",
@@ -161,6 +135,7 @@ staffs = """
 @client.command()
 async def mute(ctx, member: discord.Member, *, reason=None):
     if ctx.author.guild_permissions.administrator:
+        mod_channel = client.get_channel(869849124537778214)
         guild = ctx.guild
         mutedRole = discord.utils.get(guild.roles, name="Muted")
 
@@ -177,7 +152,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
                               description=f"{member.mention} was muted ",
                               color=discord.Color.from_rgb(73, 131, 179))
         embed.add_field(name="reason:", value=reason, inline=False)
-        await ctx.send(embed=embed)
+        await mod_channel.send(embed=embed)
         await ctx.message.delete()
         await member.add_roles(mutedRole, reason=reason)
         await member.send(
@@ -208,10 +183,12 @@ async def dm(ctx, message, *users: discord.User):
 
 
 @client.command(aliases=(['cr']))
-async def createrole(ctx, *, arg):
+async def createrole(ctx, arg, *, perms=None):
   if ctx.author.guild_permissions.manage_roles:
+    mod_channel = client.get_channel(869849124537778214)
     guild = ctx.guild
-    await guild.create_role(name=arg)
+    await guild.create_role(name=f"{arg}")
+    await mod_channel.send(f"Role {arg} was successfully created")
     await ctx.message.delete()
   else:
     await ctx.send("Come back with admin permissions ^-^")
@@ -219,9 +196,10 @@ async def createrole(ctx, *, arg):
 
 @client.command(aliases=(['ar']))
 async def giverole(ctx, role: discord.Role, user: discord.Member):
+    mod_channel = client.get_channel(869849124537778214)
     if ctx.author.guild_permissions.manage_roles:
         await user.add_roles(role)
-        await ctx.send(f"Role {role} was successfully added to {user}")
+        await mod_channel.send(f"Role {role} was successfully added to {user}")
         await ctx.message.delete()
     else:
       await ctx.send("Come back with admin permissions ^-^")
@@ -230,12 +208,13 @@ async def giverole(ctx, role: discord.Role, user: discord.Member):
 @client.command()
 async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
   if ctx.author.guild_permissions.administrator:
+    mod_channel = client.get_channel(869849124537778214)
     await user.ban(reason=reason)
     ban = discord.Embed(
         title=f"Banned {user.name}!",
         description=f"Reason: {reason}\nBy: {ctx.author.mention}",
         color=discord.Color.from_rgb(73, 131, 179))
-    await ctx.channel.send(embed=ban)
+    await mod_channel.send(embed=ban)
     await user.send(embed=ban)
     await ctx.message.delete()
   else:
@@ -272,12 +251,13 @@ async def _8ball(ctx):
 @client.command()
 async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
   if ctx.author.guild_permissions.administrator:
+    mod_channel = client.get_channel(869849124537778214)
     await user.kick(reason=reason)
     ban = discord.Embed(
         title=f"Kicked {user.name}!",
         description=f"Reason: {reason}\nBy: {ctx.author.mention}",
         color=discord.Color.from_rgb(73, 131, 179))
-    await ctx.channel.send(embed=ban)
+    await mod_channel.send(embed=ban)
     await user.send(embed=ban)
     await ctx.message.delete()
   else:
@@ -287,8 +267,9 @@ async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
 @client.command(aliases=(['rr']))
 async def remove_role(ctx, role: discord.Role, user: discord.Member):
     if ctx.author.guild_permissions.manage_roles:
+        mod_channel = client.get_channel(869849124537778214)
         await user.remove_roles(role)
-        await ctx.send(f"Role {role} was successfully removed from {user}")
+        await mod_channel.send(f"Role {role} was successfully removed from {user}")
         await ctx.message.delete()
     else:
       await ctx.send("Come back with admin permissions ^-^")
@@ -399,13 +380,14 @@ async def help(ctx, *, arg = None):
 @client.command()
 async def editrules(ctx, msg_id = None, channel: discord.TextChannel = None, *, args=None):
     msg = await channel.fetch_message(msg_id)
+    mod_channel = client.get_channel(869849124537778214)
     rulesnew = discord.Embed(title="Rules",
                           description=f"""{args}""",
                           timestamp=ctx.message.created_at,
                           color=discord.Color.from_rgb(73, 131, 179))
     rulesnew.set_footer(text=f"Requested by {ctx.author.name}")
     await msg.edit(embed=rulesnew)
-    await ctx.send("Edited Successfully~ :D")
+    await ctx.mod_channel("Rules edited.")
     await ctx.message.delete()
 
 
@@ -428,35 +410,6 @@ async def partnership(ctx):
     await ctx.send (embed=partner) 
 
 
-@client.command(help="Play with .rps [your choice]")
-async def rps(ctx, choice):
-  rpsGame = ['rock', 'paper', 'scissors']
-  comp_choice = random.choice(rpsGame)
-  if choice == 'rock':
-    if comp_choice == 'rock':
-        await ctx.send(f'Well, that was weird. We tied.\nYour choice: {choice}\nMy choice: {comp_choice}')
-    elif comp_choice == 'paper':
-            await ctx.send(f'Nice try, but I won that time!!\nYour choice: {choice}\nMy choice: {comp_choice}')
-    elif comp_choice == 'scissors':
-            await ctx.send(f"Aw, you beat me. It won't happen again!\nYour choice: {choice}\nMy choice: {comp_choice}")
-
-  elif choice == 'paper':
-      if comp_choice == 'rock':
-          await ctx.send(f'The pen beats the sword? More like the paper beats the rock!!\nYour choice: {choice}\nMy choice: {comp_choice}')
-      elif comp_choice == 'paper':
-            await ctx.send(f'Oh, wacky. We just tied. I call a rematch!!\nYour choice: {choice}\nMy choice: {comp_choice}')
-      elif comp_choice == 'scissors':
-            await ctx.send(f"Heh.\nYour choice: {choice}\nMy choice: {comp_choice}")
-
-  elif choice == 'scissors':
-        if comp_choice == 'rock':
-            await ctx.send(f'HAHA!! I JUST CRUSHED YOU!! I rock!!\nYour choice: {choice}\nMy choice: {comp_choice}')
-        elif comp_choice == 'paper':
-            await ctx.send(f'Bruh. >: |\nYour choice: {choice}\nMy choice: {comp_choice}')
-        elif comp_choice == 'scissors':
-            await ctx.send(f"Oh well, we tied.\nYour choice: {choice}\nMy choice: {comp_choice}")
-
-
 @client.command()
 async def embed(ctx, titlee, *, descriptions):
   template = discord.Embed(title=f"{titlee}",
@@ -466,7 +419,6 @@ async def embed(ctx, titlee, *, descriptions):
   await ctx.send(embed=template)
   await ctx.message.delete()
 
-  
 client.load_extension("cogs.log")
 client.load_extension("cogs.welcome")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
