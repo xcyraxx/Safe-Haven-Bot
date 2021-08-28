@@ -74,7 +74,7 @@ async def on_message(message):
     elif "pong" in message.content:
       emoji = client.get_emoji(870296542530117642)
       await message.add_reaction(emoji)
-      await client.process_commands(message)
+    await client.process_commands(message)
 
 
 @client.event
