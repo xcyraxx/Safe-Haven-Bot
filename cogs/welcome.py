@@ -64,7 +64,7 @@ And the most important thing... Enjoy!! <a:heart:872760086790012978>
         await channel.send(embed=embed)
         date_format = "%a, %b %d, %Y @ %I:%M %p"
         notifbed = discord.Embed(title="Member Left",
-                                 description=f"{member.mention} has left the server.\n Account created at {member.joined_at.strftime(date_format)}",
+                                 description=f"{member.mention} has left the server.\n User joined on {member.joined_at.strftime(date_format)}",
                                  color=discord.Color.from_rgb(73, 131, 179))
         notifbed.set_author(name=member.name, icon_url=member.avatar_url)
         await notif.send(embed=notifbed)
