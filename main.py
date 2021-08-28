@@ -26,11 +26,55 @@ async def on_ready():
 async def on_message(message):
     if client.user.mentioned_in(message):
         await message.channel.send("You can type `~~help` for more info")
-    elif "sus" in message.content:
-      emojis = ['🇦', '🇲', '🇴', '🇬', '🇺', '🇸']
-      for emoji in emojis:
-        await message.add_reaction(emoji) 
-    await client.process_commands(message)
+    elif "welcome" in message.content:
+      emoji = client.get_emoji(870303370068520960)
+      await message.add_reaction(emoji) 
+    elif "Thank you" in message.content:
+      emoji = client.get_emoji(870286031822405633)
+      await message.add_reaction(emoji) 
+    elif "ty" in message.content:
+      emoji = client.get_emoji(870286031822405633)
+      await message.add_reaction(emoji) 
+    elif "thanks" in message.content:
+      emoji = client.get_emoji(870286031822405633)
+      await message.add_reaction(emoji) 
+    elif "thanx" in message.content:
+      emoji = client.get_emoji(870286031822405633)
+      await message.add_reaction(emoji) 
+    elif "sorry" in message.content:
+      emoji = client.get_emoji(870298459993948210)
+      await message.add_reaction(emoji)
+    elif "hey" in message.content:
+      emoji = client.get_emoji(870291728006021130)
+      await message.add_reaction(emoji)
+    elif "hello" in message.content:
+      emoji = client.get_emoji(870294260476440586)
+      await message.add_reaction(emoji)
+    elif "okay" in message.content:
+      emoji = client.get_emoji(870292125139488778)
+      await message.add_reaction(emoji)
+    elif "ok" in message.content:
+      emoji = client.get_emoji(871647368653733919)
+      await message.add_reaction(emoji)
+    elif "oki" in message.content:
+      emoji = client.get_emoji(871647368653733919)
+      await message.add_reaction(emoji)
+    elif "wow" in message.content:
+      emoji = client.get_emoji(870307087727591454)
+      await message.add_reaction(emoji)
+    elif "woah" in message.content:
+      emoji = client.get_emoji(870307087727591454)
+      await message.add_reaction(emoji)
+    elif "pray" in message.content:
+      emoji = client.get_emoji(872759941629374464)
+      await message.add_reaction(emoji)
+    elif "ping" in message.content:
+      emoji = client.get_emoji(870296542530117642)
+      await message.add_reaction(emoji)
+    elif "pong" in message.content:
+      emoji = client.get_emoji(870296542530117642)
+      await message.add_reaction(emoji)
+      await client.process_commands(message)
 
 
 @client.event
@@ -508,5 +552,6 @@ async def embed(ctx, titlee, *, descriptions):
   await ctx.send(embed=template)
   await ctx.message.delete()
 
-
+  
+client.load_extension("cogs.log")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
