@@ -32,6 +32,11 @@ async def on_message(message):
       emoji2 = client.get_emoji(880153476770975754)
       await message.add_reaction(emoji) 
       await message.add_reaction(emoji2)
+    elif "Welcome" in message.content:
+      emoji = client.get_emoji(870303370068520960)
+      emoji2 = client.get_emoji(880153476770975754)
+      await message.add_reaction(emoji) 
+      await message.add_reaction(emoji2)
     await client.process_commands(message)
 
 
