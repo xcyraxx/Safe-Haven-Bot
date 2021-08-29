@@ -94,7 +94,7 @@ class Log(Cog):
         
     @Cog.listener()
     async def on_guild_channel_delete(self, channel):
-        embed = Embed(title=f"Voice Channel deleted",
+        embed = Embed(title=f"Channel deleted",
              description=f"**Name: **{channel.name}\n **Category: **{channel.category}",
              color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
