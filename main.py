@@ -309,16 +309,31 @@ async def _reddit(ctx, *, arg=None):
             )
             await ctx.send(embed=embed)
 
+        elif mango.is_self:
+            embed = discord.Embed(title=titlee,
+                                  description=mango.selftext,
+                                  color=discord.Color.from_rgb(73, 131, 179))
+            embed.set_footer(
+                text=f"{updoot}⬆️  | Requested by {ctx.author.name}")
+            print(mango.selftext)
+            await ctx.send(embed=embed)
+
+        
+        elif mango.domain != 'i.redd.it':
+            await ctx.send("That was a video <:peepo_wow_cry:751169365931458601>")
+
+
         else:
             embed = discord.Embed(title=titlee,
                                   color=discord.Color.from_rgb(73, 131, 179))
             embed.set_footer(
-                text=f"{updoot}⬆ | Requested by {ctx.author.name}")
+                text=f"{updoot}⬆️  | Requested by {ctx.author.name}")
             embed.set_image(url=mango.url)
             await ctx.send(embed=embed)
 
     else:
         await ctx.send("usage: `~~reddit {subreddit}`")
+
 
 
 help_desc = """
