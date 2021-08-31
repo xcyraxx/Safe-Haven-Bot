@@ -35,6 +35,32 @@ async def on_message(message):
       await message.add_reaction(emoji2)
     await client.process_commands(message)
 
+    
+@client.command(name='ancn')
+async def anon_conf(ctx, arg=None):
+  if arg == "help":
+    pk = await ctx.send("Make an anonymous confession with this command.")
+    time.sleep(3)
+    await ctx.message.delete()
+    await pk.delete()
+  else:
+    ak = await ctx.send("Check your DMs <a:hart:872760086790012978> ")
+    conf = discord.Embed(description="Anonymous vent/confession here")
+    conf.set_footer(text="or type cancel to cancel")
+    await ctx.author.send(embed=conf)
+    await ctx.message.delete()
+    await ak.delete()
+    msg = await client.wait_for('message')
+    cancel = "cancel"
+    if cancel.lower() in msg.content.lower():
+          await msg.channel.send("Cancelled.")
+    else:
+          vent_embed= discord.Embed(title= "Your vent confession", 
+                                      description=msg.content)
+          vent_channel = client.get_channel(869849125087240204)
+          await vent_channel.send(embed=vent_embed)
+          await msg.channel.send("It was sent to the server <3")
+   
 
 @client.command()
 async def staff(ctx):
