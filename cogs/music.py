@@ -57,13 +57,13 @@ class Music(commands.Cog):
 
 
     @commands.command()
-    async def lofi(self, ctx):
+    async def radio(self, ctx):
         vc = ctx.author.voice.channel
         await vc.connect()
         brr = ctx.voice_client
         FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
         YDL_OPTIONS = {}
-        url = "https://www.youtube.com/watch?v=5qap5aO4i9A"
+        url = "https://www.youtube.com/watch?v=36YnV9STBqc"
 
         with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
             info = ydl.extract_info(url, download=False)
