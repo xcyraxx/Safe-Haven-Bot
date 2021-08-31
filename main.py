@@ -320,7 +320,7 @@ async def _reddit(ctx, *, arg=None):
 
         
         elif mango.domain != 'i.redd.it':
-            await ctx.send("That was a video <:peepo_wow_cry:751169365931458601>")
+            await ctx.send("That was a video <:sadge:870298459993948210>")
 
 
         else:
