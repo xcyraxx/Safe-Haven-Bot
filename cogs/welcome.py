@@ -1,6 +1,8 @@
+from datetime import time
 from discord.ext.commands import Cog
 from discord.ext import commands
 import discord
+from datetime import datetime
 
 
 class Welcome(Cog):
@@ -26,11 +28,20 @@ Our server is a place where you will feel safe! We play with the bots, listen to
 
 And the most important thing... Enjoy!! <a:heart:872760086790012978>
 """
-        ment = member.mention
+        welk_send = f"""
+Hey {member.mention}, welcome to SAFE HAVEN!
+You can start chatting here and do this too:
+<#869849124537778208>
+<#869849124537778207> 
+<#869849124537778209>
+
+Enjoy your stay here!
+"""
         channel = self.bot.get_channel(869849124537778206)
         notif = self.bot.get_channel(869849124537778214)
         roles = self.bot.get_channel(869849124537778208)
         rules = self.bot.get_channel(872748526759735367)
+        gen = self.bot.get_channel(869849125087240203)
         await channel.send(f"Heylo~ {member.mention}")
         embed = discord.Embed(title="°•Welcome to Safe Haven!!•°",
                               description=welcome_mesej,
@@ -48,11 +59,19 @@ And the most important thing... Enjoy!! <a:heart:872760086790012978>
         notifbed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
         notifbed.set_author(name=member.name, icon_url=member.avatar_url)
+        sendbed = discord.Embed(title="Welcome",
+                                 description=welk_send,
+                                 color=discord.Color.from_rgb(73, 131, 179))
+        sendbed.set_thumbnail(
+            url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
+        sendbed.set_author(name=member.name, icon_url=member.avatar_url)
         await notif.send(embed=notifbed)
+        await gen.send(embed=sendbed)
         roels = await roles.send(member.mention)
         await roels.delete()
         ruels = await rules.send(member.mention)
         await ruels.delete()
+
 
     @Cog.listener()
     async def on_member_remove(self, member):
@@ -69,10 +88,14 @@ And the most important thing... Enjoy!! <a:heart:872760086790012978>
         embed.set_author(name=member.name, icon_url=member.avatar_url)
         await channel.send(embed=embed)
         date_format = "%a, %b %d, %Y @ %I:%M %p"
+        for role in member.roles:
+            bee = role.mention
         notifbed = discord.Embed(title="Member Left",
-                                 description=f"{member.mention} has left the server.\n Account created at {member.joined_at.strftime(date_format)}",
-                                 color=discord.Color.from_rgb(73, 131, 179))
+                                 description=f"{member.mention} has left the server.\n **Roles: ** {bee}\n Joined on {member.joined_at.strftime(date_format)}",
+                                 color=discord.Color.from_rgb(73, 131, 179),
+                                 timestamp = datetime.utcnow())
         notifbed.set_author(name=member.name, icon_url=member.avatar_url)
+        notifbed.set_footer(text=f"ID: {member.id}")
         await notif.send(embed=notifbed)
 
 
