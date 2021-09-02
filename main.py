@@ -38,28 +38,35 @@ async def on_message(message):
     
 @client.command(name='ancn')
 async def anon_conf(ctx, arg=None):
-  if arg == "help":
-    pk = await ctx.send("Make an anonymous confession with this command.")
-    time.sleep(3)
-    await ctx.message.delete()
-    await pk.delete()
-  else:
-    ak = await ctx.send("Check your DMs <a:hart:872760086790012978> ")
-    conf = discord.Embed(description="Anonymous vent/confession here")
-    conf.set_footer(text="or type cancel to cancel")
-    await ctx.author.send(embed=conf)
-    await ctx.message.delete()
-    await ak.delete()
-    msg = await client.wait_for('message')
-    cancel = "cancel"
-    if cancel.lower() in msg.content.lower():
-          await msg.channel.send("Cancelled.")
+    brr = ctx.author.id
+    if arg == "help":
+        pk = await ctx.send("Make an anonymous confession with this command.")
+        time.sleep(3)
+        await ctx.message.delete()
+        await pk.delete()
     else:
-          vent_embed= discord.Embed(title= "Your vent confession", 
-                                      description=msg.content)
-          vent_channel = client.get_channel(869849125087240204)
-          await vent_channel.send(embed=vent_embed)
-          await msg.channel.send("It was sent to the server <3")
+        ak = await ctx.send("Check your DMs <a:hart:872760086790012978> ")
+        conf = discord.Embed(description="Anonymous vent/confession here")
+        conf.set_footer(text="or type cancel to cancel")
+        await ctx.author.send(embed=conf)
+        await ctx.message.delete()
+        await ak.delete()
+        try:
+            msg = await client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=300.0)
+            if brr != msg.author.id:
+                pass
+            else:
+                cancel = "cancel"
+                if cancel.lower() in msg.content.lower():
+                    await msg.channel.send("Cancelled.")
+                else:
+                    vent_embed = discord.Embed(title="Your vent confession",
+                                               description=msg.content)
+                    vent_channel = client.get_channel(869849125087240204)
+                    await vent_channel.send(embed=vent_embed)
+                    await msg.channel.send("It was sent to the server <3")
+        except asyncio.TimeoutErrorz:
+            await ctx.send("Ouch you ignored me :(")
    
 
 @client.command()
