@@ -370,27 +370,7 @@ async def _reddit(ctx, *, arg=None):
 
 
 help_desc = """
-**Moderation**
-
-`mute`
-`kick`
-`ban`
-`giverole`
-`removerole`
-`createrole`
-
-**Other**
-
-`staff`
-`rules`
-`reddit`
-`8ball`
-`dm`
-`stats`
-`report`
-`rps` rock, paper, scissors
-`help` (shows this command)
-
+mute,kick,ban,giverole,removerole,createrole,staff,rules,reddit,8ball,dm,stats,report,ancn,embed,
 `help {command_name}` for more info :D
 """
 
