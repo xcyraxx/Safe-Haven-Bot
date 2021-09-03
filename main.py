@@ -95,7 +95,7 @@ async def stats(ctx):
 
 @client.command()
 async def report(ctx, user: discord.User, *, args):
-  channel = client.get_channel(872748526759735368)
+  channel = client.get_channel(869849124537778215)
   reporte = discord.Embed(title="User Reported",
                           description=f"{user} was reported by {ctx.author} \n **Reason**\n {args}",
                           color=discord.Color.from_rgb(73, 131, 179))
