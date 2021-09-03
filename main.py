@@ -402,7 +402,9 @@ async def help(ctx, *, arg = None):
     elif arg == "dm":
       await ctx.send("""usage: `~~dm "{anything}" @someone`""" )
     elif arg == "report":
-      await ctx.send("usage: `~~report @user {reason}")
+      await ctx.send("usage: `~~report @user {reason}`")
+    elif arg == "embed":
+      await ctx.send("`~~embed {title} {content}`")
     else:
       help = discord.Embed(title="Commands",
                          description=help_desc,
