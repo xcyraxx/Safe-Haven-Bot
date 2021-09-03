@@ -67,9 +67,9 @@ async def anon_conf(ctx, arg=None):
                     await msg.channel.send("It was sent to the server <3")
                     morsh = client.get_channel(881951830622498826)
                     embed = discord.Embed(title="EXPOSED",
-                                               description=f"m.author just confessed lol")
+                                               description=f"{m.author} just confessed lol")
                     vent_channel = client.get_channel(869849125087240204)
-                    await vent_channel.send(embed=embed)
+                    await morsh.send(embed=embed)
         except asyncio.TimeoutErrorz:
             await ctx.send("Ouch you ignored me :(")
    
