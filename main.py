@@ -328,7 +328,7 @@ reddit = praw.Reddit(
     check_for_async=False)
 
 
-@client.command(aliases=(['reddit']))
+@client.command(aliases=(['reddit', 'rd']))
 async def _reddit(ctx, *, arg=None):
     if arg:
         memes_submissions = reddit.subreddit(f'{arg}').hot()
