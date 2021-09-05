@@ -70,6 +70,12 @@ class Music(commands.Cog):
     async def stop(self, ctx):
         ctx.voice_client.stop()
         await ctx.send("Stopped ⏹️")
+        
+
+    @commands.command()
+    async def resume(self, ctx):
+        ctx.voice_client.pause()
+        await ctx.send("Resumed▶️")
 
 
 def setup(bot):
