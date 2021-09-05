@@ -349,13 +349,7 @@ async def _reddit(ctx, *, arg=None):
             await ctx.send(embed=embed)
 
         elif mango.is_self:
-            embed = discord.Embed(title=titlee,
-                                  description=mango.selftext,
-                                  color=discord.Color.from_rgb(73, 131, 179))
-            embed.set_footer(
-                text=f"{updoot}⬆️  | Requested by {ctx.author.name}")
-            print(mango.selftext)
-            await ctx.send(embed=embed)
+            await ctx.send(f"**{mango.title}**\n{mango.selftext}")
 
         
         elif mango.domain != 'i.redd.it':
