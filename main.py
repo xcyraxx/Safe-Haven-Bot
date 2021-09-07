@@ -29,8 +29,7 @@ async def on_message(message):
     welcome = "welcome"
     if client.user.mentioned_in(message):
         await message.channel.send("You can type `~~help` for more info")
-    elif message[:len(welcome)].lower() == welcome.lower():
-    #elif welcome.lower() in message.startswith().lower():
+    elif welcome.lower() in message.lower():
       emoji = client.get_emoji(870303370068520960)
       emoji2 = client.get_emoji(880153476770975754)
       await message.add_reaction(emoji) 
