@@ -35,6 +35,202 @@ async def on_message(message):
       await message.add_reaction(emoji) 
       await message.add_reaction(emoji2)
     await client.process_commands(message)
+    
+    
+@client.command()
+async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=None, option4=None, option5=None, option6=None, option7=None, option8=None):
+    poll_desc_if_2 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}
+    """
+    poll_desc_if_3 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}
+    """
+    poll_desc_if_4 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}\n
+    🇩 {option4}
+    """
+    poll_desc_if_5 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}\n
+    🇩 {option4}\n
+    🇪 {option5}
+    """
+    poll_desc_if_6 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}\n
+    🇩 {option4}\n
+    🇪 {option5}\n
+    🇫 {option6}
+    """
+    poll_desc_if_7 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}\n
+    🇩 {option4}\n
+    🇪 {option5}\n
+    🇫 {option6}\n
+    🇬 {option7}
+    """
+    poll_desc_if_8 = f"""
+    ⏱️ The poll ends in **{x} hours**
+
+    🇦 {option1}\n
+    🇧 {option2}\n
+    🇨 {option3}\n
+    🇩 {option4}\n
+    🇪 {option5}\n
+    🇫 {option6}\n
+    🇬 {option7}\n
+    🇭 {option8}
+    """
+    if ctx.author.guild_permissions.administrator:
+      if not option1:
+        await ctx.send("Use the poll command like this: \n`~~poll {hours you want to run the poll} {question (in quotes)} {choice 1} {choice 2}`, upto 8 choices")
+      elif not option2:
+        await ctx.send("Use the poll command like this: \n`~~poll {hours you want to run the poll} {question (in quotes)} {choice 1} {choice 2}`, upto 8 choices")
+      elif option8:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_8,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_footer(text=f"Poll ends in {x} hours")
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await brr.add_reaction('🇩')
+        await brr.add_reaction('🇪')
+        await brr.add_reaction('🇫')
+        await brr.add_reaction('🇬')
+        await brr.add_reaction('🇭')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(int(hour))
+        await ctx.send("Time up! The poll is now closed.")
+      elif option7:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_7,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await brr.add_reaction('🇩')
+        await brr.add_reaction('🇪')
+        await brr.add_reaction('🇫')
+        await brr.add_reaction('🇬')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(int(hour))
+        await ctx.send("Time up! The poll is now closed.")
+      elif option6:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_6,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await brr.add_reaction('🇩')
+        await brr.add_reaction('🇪')
+        await brr.add_reaction('🇫')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(hour)
+        await ctx.send("Time up! The poll is now closed.")
+      elif option5:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_5,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await brr.add_reaction('🇩')
+        await brr.add_reaction('🇪')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(int(hour))
+        await ctx.send("Time up! The poll is now closed.")
+      elif option4:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_4,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await brr.add_reaction('🇩')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(int(hour))
+        await ctx.send("Time up! The poll is now closed.")
+        
+      elif option3:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_3,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url="https://5.imimg.com/data5/CR/NA/II/SELLER-55766215/designer-garden-lighting-pole-500x500.jpg")
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await brr.add_reaction('🇨')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(hour)
+        await ctx.send("Time up! The poll is now closed.")
+        
+      else:
+        polle = discord.Embed(title=question,
+                          description=poll_desc_if_2,
+                          color=discord.Color.from_rgb(132, 0, 255)
+                          )
+        polle.set_thumbnail(
+            url=ctx.author.avatar_url)
+        brr = await ctx.send(embed=polle)
+        await brr.add_reaction('🇦')
+        await brr.add_reaction('🇧')
+        await ctx.message.delete()
+        hour = int(x)*3600
+        await asyncio.sleep(int(hour))
+        await ctx.send("Time up! The poll is now closed.")
+    else:
+        await ctx.send("Sorry you don't have permission to run that command.")
 
     
 @client.command(name='ancn')
