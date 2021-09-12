@@ -16,7 +16,7 @@ class Reminder(commands.Cog):
         await ctx.send(f"I'll ping you in {time} hour(s)")
         hour = time*3600
         print(hour)
-        await asyncio.sleep(int(time))
+        await asyncio.sleep(int(hour))
         await ctx.send(f"{ctx.author.mention}. {reason}")
 
 
