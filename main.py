@@ -652,4 +652,5 @@ async def embed(ctx, titlee, *, descriptions):
 client.load_extension("cogs.log")
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.music")
+client.load_extension("cogs.reminder")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
