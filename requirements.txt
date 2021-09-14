@@ -1,5 +1,5 @@
 discord==1.7.3
-discord.py==1.7.3
+enhanced-dpy==1.7.3.7.post1
 praw==7.4.0
 youtube-dl==2021.5.16
 bs4==0.0.1
