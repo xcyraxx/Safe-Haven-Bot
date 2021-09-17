@@ -1,4 +1,5 @@
 import discord
+from discord.colour import Color
 from discord.ext import commands
 from discord.ext.commands import Cog
 import asyncio
@@ -46,6 +47,19 @@ class Reminder(commands.Cog):
         info.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed=info)
 
+    @commands.command()
+    async def serverinfo(self, ctx):
+        infobed = discord.Embed(
+            title="Server Info",
+            Color=discord.Color.dark_orange()
+        )
+        infobed.add_field(name="Server ID", value=ctx.guild.id)
+        infobed.add_field(name="Created On", value=ctx.guild.created_at.strftime("%a, %b %d, %Y %I:%M %p"))
+        infobed.add_field(name="Owner", value=f"{ctx.guild.owner.name}#{ctx.author.discriminator}", inline=False)
+        infobed.add_field(name="Total Roles", value=len(ctx.guild.roles), inline=True)
+        infobed.set_thumbnail(url=ctx.guild.icon_url)
+        infobed.set_author(name=ctx.guild.owner.name, icon_url=ctx.guild.owner.avatar_url)
+        await ctx.send(embed=infobed)
 
 
 def setup(bot):
