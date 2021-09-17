@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
 import asyncio
+import datetime, time
 
 class Reminder(commands.Cog):
     def __init__(self, client):
@@ -10,6 +11,8 @@ class Reminder(commands.Cog):
     @Cog.listener()
     async def on_ready(self):
         print('Reminder up!')
+        global startTime 
+        startTime = time.time()
 
     @commands.command()
     async def reminder(self, ctx, time: int, *, reason=None):
