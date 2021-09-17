@@ -7,7 +7,7 @@ from discord.flags import Intents
 import time
 import asyncio
 import praw
-
+from discord_slash import SlashCommand, SlashContext
 
 intents = discord.Intents.default()
 intents.members = True
@@ -15,7 +15,7 @@ intents.members = True
 
 custom_prefixes = {}
 default_prefixes = "="
-
+__GUILD_ID__ = 869849123963162635
 
 async def determine_prefix(bot, message):
     guild = message.guild
@@ -28,6 +28,8 @@ client = commands.Bot(command_prefix=determine_prefix,
                       help_command=None,
                       case_insensitive=True,
                       intents=intents)
+
+slash = SlashCommand(client, sync_commands=True)
 
 mod_channel = client.get_channel(869849124537778214)
 
@@ -293,15 +295,38 @@ async def anon_conf(ctx, arg=None):
             await ctx.send("Ouch you ignored me :(")
    
 
-@client.command()
-async def staff(ctx):
+@slash.slash(
+    name="staff",
+    description="Displays the Staff list.",
+    guild_ids=[__GUILD_ID__]
+)
+async def staff(ctx: SlashContext):
     embed = discord.Embed(title="Staff",
-                          description=staffs,
-                          timestamp=ctx.message.created_at,
                           color=discord.Color.from_rgb(73, 131, 179))
-    embed.set_footer(text=f"Requested by {ctx.author.name}")
+    embed.add_field(name="Owner", value="<@803964694972596274>", inline=False)
+    embed.add_field(name="Admin", value="<@613789929134227465>", inline=False)
+    embed.add_field(name="Moderators", value="<@875582711073484941>\n<@837703622896386149>\n<@840627967696830485>\n<@797056468594458637>\n<@705205126390087710>\n<@869917928164835338>", inline=False)
+    embed.add_field(name="Event Managers", value="<@816623527896940604>\n<@821735484715434015>\n<@776912755483607100>", inline=False)
+    embed.set_footer(text=f"Applications Closed Currently")
     embed.set_thumbnail(url=ctx.guild.icon_url)
     await ctx.send(embed=embed)
+
+
+
+staffs = """
+**Owner**
+
+
+**Admins**
+
+
+
+**Moderators**
+
+
+**Event Managers**
+
+"""
 
 
 @client.command()
@@ -371,33 +396,6 @@ async def rules(ctx):
     embed.set_footer(text=f"Requested by {ctx.author.name}")
     await ctx.send(embed=embed)
     await ctx.message.delete()
-
-
-staffs = """
-**Owner**
-
-<@803964694972596274>
-
-**Admins**
-
-<@613789929134227465>
-
-**Moderators**
-
-<@875582711073484941>
-<@837703622896386149>
-<@840627967696830485>
-<@797056468594458637>
-<@705205126390087710>
-<@869917928164835338>
-<@797056468594458637>
-
-**Event Managers**
-
-<@816623527896940604>
-<@821735484715434015>
-<@776912755483607100>
-"""
 
 
 @client.command()
@@ -547,19 +545,17 @@ async def _reddit(ctx, *, arg=None):
 
 
 
-help_desc = """
-mute,kick,ban,giverole,removerole,createrole,staff,rules,reddit,8ball,dm,stats,report,ancn,embed
-`help {command_name}` for more info :D
-"""
+help_desc = "Under Dev :/"
 
 
 @client.command()
 async def help(ctx, *, arg = None):
-      help = discord.Embed(title="Commands",
-                         description=help_desc,
-                         timestamp=ctx.message.created_at,
+    help = discord.Embed(title="Commands",
+                         #description="Hi there! My prefix is `=`",
+                         description = help_desc,
                          color=discord.Color.from_rgb(73, 131, 179))
-      await ctx.send(embed=help)
+    help.add_field(name="Moderation", value=help_desc)
+    await ctx.send(embed=help)
 
     
 @client.command()
