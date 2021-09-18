@@ -59,7 +59,7 @@ class Imej(commands.Cog):
         file = discord.File("data/yeet.jpg")
         await ctx.send(file=file)
 
-
+#checkcheckcehck
 
 def setup(bot):
     bot.add_cog(Imej(bot))
