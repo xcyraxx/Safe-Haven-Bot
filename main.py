@@ -16,7 +16,7 @@ intents.members = True
 
 custom_prefixes = {}
 default_prefixes = "="
-__GUILD_ID__ = 869849123963162635
+__GUILD_ID__ = 869849123963162635, 846609621429780520
 
 async def determine_prefix(bot, message):
     guild = message.guild
@@ -299,7 +299,7 @@ async def anon_conf(ctx, arg=None):
 @slash.slash(
     name="staff",
     description="Displays the Staff list.",
-    guild_ids=[__GUILD_ID__]
+    guild_ids=__GUILD_ID__
 )
 async def staff(ctx: SlashContext):
     embed = discord.Embed(title="Staff",
@@ -552,7 +552,7 @@ help_desc = "Under Dev :/"
 @slash.slash(
     name="help",
     description="Displays the Basic Commands",
-    guild_ids=[__GUILD_ID__]
+    guild_ids=__GUILD_ID__
 )
 async def help(ctx: SlashContext):
     help = discord.Embed(title="Commands",

@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from PIL import Image
 from discord.ext.commands import Cog
+import urllib
 from io import BytesIO
 
 
@@ -48,10 +49,11 @@ class Imej(commands.Cog):
 
         avatar_bytes = await usah.avatar_url.read()
         img = Image.open(BytesIO(avatar_bytes))
-        yeetus = await "https://i.kym-cdn.com/entries/icons/mobile/000/031/544/cover13.jpg".read()
-        deleet = Image.open(BytesIO(yeetus))
+        img = img.resize((215, 215))
+        yeetus = urllib.request.urlretrieve("https://i.kym-cdn.com/photos/images/newsfeed/001/610/396/66e.jpg", "data/yeet.jpg")
+        deleet = Image.open("data/yeet.jpg")
 
-        deleet.paste(img)
+        deleet.paste(img, (72, 50))
         deleet.save("data/yeet.jpg")
 
         file = discord.File("data/yeet.jpg")
