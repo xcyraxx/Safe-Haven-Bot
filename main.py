@@ -6,6 +6,7 @@ import random
 from discord.flags import Intents
 import time
 import asyncio
+from discord.utils import SnowflakeList
 import praw
 from discord_slash import SlashCommand, SlashContext
 
@@ -548,8 +549,12 @@ async def _reddit(ctx, *, arg=None):
 help_desc = "Under Dev :/"
 
 
-@client.command()
-async def help(ctx, *, arg = None):
+@slash.slash(
+    name="help",
+    description="Displays the Basic Commands",
+    guild_ids=[__GUILD_ID__]
+)
+async def help(ctx: SlashContext):
     help = discord.Embed(title="Commands",
                          #description="Hi there! My prefix is `=`",
                          description = help_desc,
@@ -594,4 +599,5 @@ client.load_extension("cogs.welcome")
 client.load_extension("cogs.music")
 client.load_extension("cogs.reminder")
 client.load_extension("cogs.giveaway")
+client.load_extension("cogs.image")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
