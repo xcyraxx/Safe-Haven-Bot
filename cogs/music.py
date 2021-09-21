@@ -1,3 +1,10 @@
+"""
+Music command script for Miku
+
+Main contributors:
+    @savioxavier, @xcyraxx, @UndriveAssassin
+"""
+
 import urllib.request
 import urllib.parse
 import asyncio
@@ -7,6 +14,7 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
 import youtube_dl
+import validators
 from bs4 import BeautifulSoup
 import requests
 import pafy
@@ -70,73 +78,69 @@ class Music(commands.Cog):
         # TODO: FIX : Too many local variables
 
         if arg:
-            urls = re.findall(
-                "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+", arg.lower())
-
             if not ctx.voice_client:
                 voice_channel = ctx.author.voice.channel
                 voice = await voice_channel.connect()
             else:
                 voice = ctx.voice_client
 
-            searching = discord.Embed(
-                title="Searching", description=f"Now searching for `{arg}`", color=discord.Color.from_rgb(3, 252, 252))
+            if ctx.voice_client.is_playing():
+                await ctx.send("Please wait till the current song gets over or Stop it. Queue Function coming soon (savio plez)")
+            else:
+                searching = discord.Embed(
+                    title="Searching", description=f"{arg}\n\nRequested by: {ctx.author.mention}", color=discord.Color.from_rgb(3, 252, 252))
 
-            searching.set_thumbnail(url=self.client.user.avatar_url)
+                searching.set_thumbnail(url=self.client.user.avatar_url)
 
-            searching.set_footer(
-                text=f"Requested By {ctx.author.display_name}")
+                serchbed = await ctx.send(embed=searching)
 
-            serchbed = await ctx.send(embed=searching)
+                valid = validators.url(arg)
+                FFMPEG_OPTIONS = {
+                    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", "options": "-vn"}
 
-            FFMPEG_OPTIONS = {
-                "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5", "options": "-vn"}
+                YDL_OPTIONS = {}
 
-            YDL_OPTIONS = {}
+                query_string = urllib.parse.urlencode({
+                    "search_query": arg
+                })
 
-            query_string = urllib.parse.urlencode({
-                "search_query": arg
-            })
+                htm_content = urllib.request.urlopen(
+                    "https://www.youtube.com/results?" + query_string
+                )
 
-            htm_content = urllib.request.urlopen(
-                "https://www.youtube.com/results?" + query_string
-            )
+                search_results = re.findall(
+                    r"watch\?v=(\S{11})", htm_content.read().decode())
 
-            search_results = re.findall(
-                r"watch\?v=(\S{11})", htm_content.read().decode())
+                url = f"http://www.youtube.com/watch?v={search_results[1]}"
 
-            url = f"http://www.youtube.com/watch?v={search_results[1]}"
+                vid = pafy.new(url)
+                brr = vid.title
+                thumb_url = vid.thumb
+                dur = vid.duration
 
-            req = requests.get(url)
-            soup = BeautifulSoup(req.text, "html.parser")
-            title = soup.find("meta", property="og:title")
-            brr = title["content"] if title else "No meta title given"
+                with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
+                    if valid == True:
+                        url3 = arg
+                        video = pafy.new(url3)
+                        url = url3
+                        thumb_url = video.thumb
+                        brr = video.title
+                        dur = video.duration
 
-            thumb_url = f"https://img.youtube.com/vi/{search_results[1]}/maxresdefault.jpg"
+                    info = ydl.extract_info(url, download=False)
+                    url2 = info["formats"][0]["url"]
+                    #comment
+                    source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
 
-            with youtube_dl.YoutubeDL(YDL_OPTIONS) as ydl:
-                if arg in urls:
-                    print(arg)
+                    playing = discord.Embed(
+                        title="Now Playing", description=f"🎶[{brr}]({url})\n`[00:00:00/{dur}]`\n\nRequested by: {ctx.author.mention}", color=discord.Color.from_rgb(3, 252, 252))
 
-                    url3 = arg
-                    video = pafy.new(url3)
-                    url = url3
-                    thumb_url = video.thumb
-                    brr = video.title
+                    playing.set_thumbnail(url=thumb_url)
+                    playing.url
 
-                info = ydl.extract_info(url, download=False)
-                url2 = info["formats"][0]["url"]
+                    voice.play(source)
 
-                source = await discord.FFmpegOpusAudio.from_probe(url2, **FFMPEG_OPTIONS)
-
-                playing = discord.Embed(
-                    title="Playing", description=f"🎶Now playing `{brr}`", color=discord.Color.from_rgb(3, 252, 252))
-
-                playing.set_thumbnail(url=thumb_url)
-
-                voice.play(source)
-
-                await serchbed.edit(embed=playing)
+                    await serchbed.edit(embed=playing)
 
         else:
             await ctx.send(f"Provide a name or a link to play the song. Usage: `{PREFIX}play song name`")
@@ -178,7 +182,7 @@ class Music(commands.Cog):
         queue = []
         for i in queue:
             print(i)
-
+    
 
 def setup(bot):
     "Setup command for the bot"
