@@ -306,7 +306,7 @@ async def staff(ctx: SlashContext):
                           color=discord.Color.from_rgb(73, 131, 179))
     embed.add_field(name="Owner", value="<@803964694972596274>", inline=False)
     embed.add_field(name="Admin", value="<@613789929134227465>", inline=False)
-    embed.add_field(name="Moderators", value="<@875582711073484941>\n<@837703622896386149>\n<@840627967696830485>\n<@797056468594458637>\n<@705205126390087710>\n<@869917928164835338>", inline=False)
+    embed.add_field(name="Moderators", value="<@875582711073484941>\n<@840627967696830485>\n<@797056468594458637>\n<@705205126390087710>", inline=False)
     embed.add_field(name="Event Managers", value="<@816623527896940604>\n<@821735484715434015>\n<@776912755483607100>", inline=False)
     embed.set_footer(text=f"Applications Closed Currently")
     embed.set_thumbnail(url=ctx.guild.icon_url)
