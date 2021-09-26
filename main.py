@@ -3,10 +3,8 @@
 import discord
 from discord.ext import commands
 import random
-from discord.flags import Intents
 import time
 import asyncio
-from discord.utils import SnowflakeList
 import praw
 from discord_slash import SlashCommand, SlashContext
 
