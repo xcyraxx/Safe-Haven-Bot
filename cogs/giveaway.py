@@ -68,7 +68,7 @@ class Giveaway(commands.Cog):
     
 
         else:
-            await ctx.send("Specify a channel to run the giveaway in. Usage: `~~giveaway #channel`")
+            await ctx.send("Specify a channel to run the giveaway in. Usage: `=giveaway #channel`")
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))
