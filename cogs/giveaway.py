@@ -20,7 +20,7 @@ class Giveaway(commands.Cog):
         print('Giveaway up!')
 
     @commands.command(name="giveaway")
-    async def command_giveaway(self, ctx, channel: discord.TextChannel):
+    async def command_giveaway(self, ctx, channel: discord.TextChannel=None):
         if channel:
                 await ctx.send("Enter Giveaway item Name.")
                 item = await self.client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=60)
