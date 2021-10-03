@@ -6,6 +6,9 @@ from discord.ext import commands
 import asyncio
 import random
 from discord.ext.commands import Cog
+from discord_slash import SlashCommand, cog_ext, SlashContext
+
+__GID__ = [869849123963162635, 846609621429780520]
 
 
 class Giveaway(commands.Cog):
@@ -16,8 +19,8 @@ class Giveaway(commands.Cog):
     async def on_ready(self):
         print('Giveaway up!')
 
-    @commands.command()
-    async def giveaway(self, ctx, channel: discord.TextChannel=None):
+    @cog_ext.cog_slash(name="giveaway", description="Start a giveaway", guild_ids=__GID__)
+    async def command_giveaway(self, ctx: SlashContext, channel: discord.TextChannel):
         if channel:
                 await ctx.send("Enter Giveaway item Name.")
                 item = await self.client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=60)
@@ -36,11 +39,11 @@ class Giveaway(commands.Cog):
                 elif a[2] == 'h':
                     time = int(a[1])*3600
                     nano = "Hour(s)"
-                init = discord.Embed(title=item,
+                init = discord.Embed(title=item.content,
                                     description=f"React with 🎉 to enter!\nEnds: in {a[1]} {nano}\nHosted by: {ctx.author.mention}",
                                     color=discord.Color.from_rgb(73, 131, 179)
                 )
-                init.set_footer(text=f"Total Winners: {winners}")
+                init.set_footer(text=f"Total Winners: {winners.content}")
                 await channel.send("🎉**GIVEAWAY**🎉")
                 initembed = await channel.send(embed=init)
                 init_id = initembed.id
@@ -53,8 +56,8 @@ class Giveaway(commands.Cog):
 
                 users = await new_msg.reactions[0].users().flatten()
                 winner = random.choice(users)
-                print(winner)
-                final = discord.Embed(title=item,
+                await channel.send(f"Congrats {winner.mention}, you won the {item.content}")
+                final = discord.Embed(title=item.content,
                                     description=f"**Winner:** {winner}\n**Hosted By:** {ctx.author.mention}",
                                     color=discord.Color.from_rgb(73, 131, 179)
                 )
