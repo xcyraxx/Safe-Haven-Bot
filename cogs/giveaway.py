@@ -20,7 +20,7 @@ class Giveaway(commands.Cog):
         print('Giveaway up!')
 
     @cog_ext.cog_slash(name="giveaway", description="Start a giveaway", guild_ids=__GID__)
-    async def command_giveaway(self, ctx: SlashContext, channel: discord.TextChannel):
+    async def command_giveaway(self, ctx, channel: discord.TextChannel):
         if channel:
                 await ctx.send("Enter Giveaway item Name.")
                 item = await self.client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=60)
