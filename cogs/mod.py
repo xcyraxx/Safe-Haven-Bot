@@ -1,18 +1,17 @@
 import discord
-from discord import client
 import discord.ext
-import re
-from discord.ext import commands
-import asyncio
-import random
 from discord.ext.commands import Cog
 from discord_slash import SlashCommand, cog_ext, SlashContext
 
 __GID__ = [869849123963162635, 846609621429780520]
 
-class Mod(Cog):
-    def __init__(self, bot):
-        self.bot = bot
+class Mod(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+
+    @Cog.listener()
+    async def on_ready(self):
+        print("Mod up!")
 
     @cog_ext.cog_slash(name="kick", description="Kick a user", guild_ids=__GID__)
     async def kick(self, ctx, user: discord.Member, *, reason="No reason provided"):
