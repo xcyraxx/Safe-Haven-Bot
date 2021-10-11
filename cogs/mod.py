@@ -7,15 +7,15 @@ from discord_slash import SlashCommand, cog_ext, SlashContext
 __GID__ = [869849123963162635, 846609621429780520]
 
 class Mod(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
 
-    @Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
         print("Mod up!")
 
     @cog_ext.cog_slash(name="kick", description="Kick a user", guild_ids=__GID__)
-    async def kick(self, ctx, user: discord.Member, *, reason="No reason provided"):
+    async def kick(self, ctx: SlashContext, user: discord.Member, *, reason="No reason provided"):
         if ctx.author.guild_permissions.administrator:
             mod_channel = self.bot.get_channel(869849124537778214)
             await user.kick(reason=reason)
@@ -31,7 +31,7 @@ class Mod(commands.Cog):
             await ctx.send("Come back with admin permissions ^-^")
 
     @cog_ext.cog_slash(name="ban", description="Ban a user", guild_ids=__GID__)
-    async def ban(self, ctx, user: discord.Member, *, reason="No reason provided"):
+    async def ban(self, ctx: SlashContext, user: discord.Member, *, reason="No reason provided"):
         if ctx.author.guild_permissions.administrator:
             mod_channel = self.bot.get_channel(869849124537778214)
             await user.ban(reason=reason)
@@ -47,7 +47,7 @@ class Mod(commands.Cog):
             await ctx.send("Come back with admin permissions ^-^")
 
     @cog_ext.cog_slash(name="mute", description="Mute a user", guild_ids=__GID__)
-    async def mute(self, ctx, member: discord.Member, *, reason=None):
+    async def mute(self, ctx: SlashContext, member: discord.Member, *, reason=None):
         await ctx.defer()
         if ctx.author.guild_permissions.manage_roles:
             mod_channel = self.bot.get_channel(869849124537778214)
