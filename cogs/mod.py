@@ -13,10 +13,6 @@ __GID__ = [869849123963162635, 846609621429780520]
 class Mod(Cog):
     def __init__(self, bot):
         self.bot = bot
-    
-    @Cog.listener()
-    async def on_ready(self):
-        print('Mod up!')
 
     @cog_ext.cog_slash(name="kick", description="Kick a user", guild_ids=__GID__)
     async def kick(self, ctx, user: discord.Member, *, reason="No reason provided"):
