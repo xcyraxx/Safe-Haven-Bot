@@ -398,58 +398,11 @@ async def rules(ctx):
     await ctx.message.delete()
 
 
-@client.command()
-async def mute(ctx, member: discord.Member, *, reason=None):
-    if ctx.author.guild_permissions.administrator:
-        mod_channel = client.get_channel(869849124537778214)
-        guild = ctx.guild
-        mutedRole = discord.utils.get(guild.roles, name="Muted")
-
-        if not mutedRole:
-            mutedRole = await guild.create_role(name="Muted")
-
-            for channel in guild.channels:
-                await channel.set_permissions(mutedRole,
-                                              speak=False,
-                                              send_messages=False,
-                                              read_message_history=True,
-                                              read_messages=True)
-        embed = discord.Embed(title="muted",
-                              description=f"{member.mention} was muted ",
-                              color=discord.Color.from_rgb(73, 131, 179))
-        embed.add_field(name="reason:", value=reason, inline=False)
-        await mod_channel.send(embed=embed)
-        await ctx.message.delete()
-        await member.add_roles(mutedRole, reason=reason)
-        await member.send(
-            f" you have been muted from: {guild.name} reason: {reason}")
-
-    else:
-      await ctx.send("Come back with admin permissions ^-^")
-
-
 @client.command(name="dm")
 async def dm(ctx, message, *users: discord.User):
     for user in users:
         await user.send(message)
         print("sent")
-
-
-@client.command()
-async def ban(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.guild_permissions.administrator:
-    mod_channel = client.get_channel(869849124537778214)
-    await user.ban(reason=reason)
-    ban = discord.Embed(
-        title=f"Banned {user.name}!",
-        description=f"Reason: {reason}\nBy: {ctx.author.mention}",
-        color=discord.Color.from_rgb(73, 131, 179))
-    await mod_channel.send(embed=ban)
-    await ctx.send("User Banned.")
-    await user.send(embed=ban)
-    await ctx.message.delete()
-  else:
-    await ctx.send("Come back with admin permissions ^-^")
 
 
 @client.command(aliases=(['8ball']))
@@ -477,23 +430,6 @@ async def _8ball(ctx):
         'yep']
 
     await ctx.send(f'{random.choice(responses)}')
-
-
-@client.command()
-async def kick(ctx, user: discord.Member, *, reason="No reason provided"):
-  if ctx.author.guild_permissions.administrator:
-    mod_channel = client.get_channel(869849124537778214)
-    await user.kick(reason=reason)
-    ban = discord.Embed(
-        title=f"Kicked {user.name}!",
-        description=f"Reason: {reason}\nBy: {ctx.author.mention}",
-        color=discord.Color.from_rgb(73, 131, 179))
-    await mod_channel.send(embed=ban)
-    await ctx.send("User Kicked.")
-    await user.send(embed=ban)
-    await ctx.message.delete()
-  else:
-    await ctx.send("Come back with admin permissions ^-^")
 
 
 reddit = praw.Reddit(
@@ -575,6 +511,19 @@ async def editrules(ctx, msg_id = None, channel: discord.TextChannel = None, *, 
     await ctx.mod_channel("Rules edited.")
     await ctx.message.delete()
 
+@client.command()
+async def roll(ctx, channel: discord.TextChannel = None, *, args=None):
+    msg = await channel.fetch_message(894127133314650143)
+    rulesnew = discord.Embed(title="Giveaway Ended ^^",
+                          description=f"Winner: <@873971996025827348>\n Hosted by: <@705205126390087710>\n",
+                          timestamp=ctx.message.created_at,
+                          color=discord.Color.from_rgb(73, 131, 179))
+    rulesnew.set_footer(text=f"Thanks for participating!")
+    await msg.edit(embed=rulesnew)
+    await channel.send("CongratuIations <@873971996025827348>, You won the Autumn Eevee!")
+    await ctx.message.delete()
+
+#894127133314650143
 
 part_desc="""
 • DM any staff.
@@ -599,4 +548,5 @@ client.load_extension("cogs.music")
 client.load_extension("cogs.reminder")
 client.load_extension("cogs.giveaway")
 client.load_extension("cogs.image")
+client.load_extension("cogs.mod")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
