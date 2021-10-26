@@ -3,15 +3,21 @@ Meta commands for the Miku bot
 """
 
 import datetime
+from os import name
 import time
 from typing import Text
 import discord
+import datetime 
+from typing import Optional
+from discord import Embed, Member
+from discord.ext.commands import Greedy
 from discord.enums import ChannelType
 from discord.ext.commands.core import guild_only
 from discord_slash import SlashCommand, cog_ext, SlashContext
+from discord.ext.commands import command, has_permissions, bot_has_permissions
 from discord.ext import commands
 
-__GUILD_ID__ = [846609621429780520, 893122121805496371]
+__GUILD_ID__ = [846609621429780520, 869849123963162635]
 # this is very important for creating a cog
 class Meta(commands.Cog):
     "Python class that handles all meta commands"
@@ -34,11 +40,7 @@ class Meta(commands.Cog):
     async def command_botinfo(self, ctx: SlashContext):
         "Returns information about the bot"
 
-        SKYASCII = ctx.guild.get_member(614053918867062785)
-        ADIL = ctx.guild.get_member(613789929134227465)
-        MARSH = ctx.guild.get_member(614058101347188737)
-
-        user = ctx.guild.get_member(886914091657101313)
+        user = ctx.guild.get_member(879624970492325938)
         info = discord.Embed(
             title="Bot Info",
             color=discord.Color.from_rgb(3, 252, 252)
@@ -55,13 +57,13 @@ class Meta(commands.Cog):
                        value="Enhanced Discord.py v1.7.3.7.post1", inline=False)
         info.add_field(name="Python Version",
                        value="Python 3.9.6", inline=True)
+        info.add_field(name="OS", value="Stack v2.7.3")
         info.add_field(name="Code Lines written", value="492")
         info.add_field(name="Uptime", value=uptime, inline=False)
         info.add_field(name="Top Role in this Server", value=user.top_role)
         info.add_field(
-            name="Dev Team", value="Adil#5514 ,Skyascii#1860, marshadow#7063", inline=False)
+            name="Dev", value="Adil#5514", inline=False)
         info.add_field(name="Version", value='1.3.0')
-        info.set_footer(text="Avatar drawn by marshadow#7063")
         info.set_thumbnail(url=user.avatar_url)
         await ctx.send(embed=info)
 
@@ -93,7 +95,7 @@ class Meta(commands.Cog):
                           description=f"{desc}",
                           color=discord.Color.from_rgb(73, 131, 179))
         await ctx.send(embed=template)
-
+        
 def setup(bot):
     "Setup command for the bot"
 

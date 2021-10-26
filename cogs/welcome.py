@@ -42,7 +42,6 @@ Enjoy your stay here!
         roles = self.bot.get_channel(869849124537778208)
         rules = self.bot.get_channel(872748526759735367)
         gen = self.bot.get_channel(869849125087240203)
-        await channel.send(f"Heylo~ {member.mention}")
         embed = discord.Embed(title="°•Welcome to Safe Haven!!•°",
                               description=welcome_mesej,
                               color=discord.Color.from_rgb(73, 131, 179))
@@ -51,7 +50,7 @@ Enjoy your stay here!
         embed.set_thumbnail(
             url="https://cdn.discordapp.com/attachments/869851937699426324/877162557050322974/unknown.png")
         embed.set_author(name=member.name, icon_url=member.avatar_url)
-        await channel.send(embed=embed)
+        await channel.send(f"Heylo~ {member.mention}", embed=embed)
         date_format = "%a, %b %d, %Y @ %I:%M %p"
         notifbed = discord.Embed(title="Member Joined",
                                  description=f"{member.mention} has joined.\n Account created at {member.created_at.strftime(date_format)}",

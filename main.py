@@ -7,6 +7,8 @@ import time
 import asyncio
 import praw
 from discord_slash import SlashCommand, SlashContext
+from discord_slash.utils.manage_components import wait_for_component, ComponentContext
+from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
 
 intents = discord.Intents.default()
 intents.members = True
@@ -33,11 +35,112 @@ __GID__ = [869849123963162635]
 
 mod_channel = client.get_channel(869849124537778214)
 
+MOD_HELP = """
+    **`kick`**\nKick a user from the Server.
+
+    **`mute`**\nMute a user (Currently not working due to discord API issue)
+
+    **`ban`**\nBan a user from the Server.
+    """
+
+MUSIC_HELP = """
+**`join`**: 
+    Connect the bot your current Voice Channel.
+
+**`play <song_name | url>`**: 
+    Play a song from YouTube given a search term or URL.
+
+**`stop`**: 
+    Stop playing the song.
+
+**`pause`**: 
+    Pause the song currently playing.
+
+**`resume`**: 
+    Resume playing the song.
+
+**`skip`**:
+    Skip the current song.
+
+**`leave`**:
+    Leave the vc.
+
+**`queue`**:
+    Display the current queue(Is very shit rn, im working on it).
+
+"""
+
+OTHER_HELP = """
+**`botinfo`**:
+Some info about the Bot
+
+**`serverinfo`**:
+Info about the server
+
+**`embed`**
+Make a custom embed.
+
+**`reminder`**
+Set a reminder ping.
+
+**`giveaway`**
+Host a giveaway(Admin-only)
+
+**`poll`**
+Make a poll
+
+**`reddit`**
+Get an image from any subreddit.
+
+**`8ball`**:
+Ask me any yes/no questions.
+
+**`anonymous_confession`**:
+Non-slash cmd, run it like `=ancn` in the server.
+"""
 
 @client.event
 async def on_ready():
   print("Bot Online.")
   await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="over this place ^^"))
+
+@client.event
+async def on_component(ctx: ComponentContext):
+    # ctx.selected_options is a list of all the values the user selected
+    music = discord.Embed(
+        title = "Safe Haven Help",
+        description = MUSIC_HELP,
+        color=discord.Color.from_rgb(3, 252, 252)
+    )
+    mods = discord.Embed(
+        title = "Safe Haven Help",
+        description = MOD_HELP,
+        color=discord.Color.from_rgb(3, 252, 252)
+    )
+    
+    other = discord.Embed(
+        title = "Safe Haven Help",
+        description = OTHER_HELP,
+        color=discord.Color.from_rgb(3, 252, 252)
+    )
+    
+    if 'm00sik' in ctx.selected_options:
+        await ctx.edit_origin(embed = music)
+        pass
+    elif 'modz' in ctx.selected_options:
+        await ctx.edit_origin(embed = mods)
+        pass
+    elif 'other' in ctx.selected_options:
+        await ctx.edit_origin(embed = other)
+        pass
+
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Please pass in all requirements :rolling_eyes:.')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("You dont have all the requirements :angry:")
 
 @client.command()
 @commands.guild_only()
@@ -134,7 +237,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option8:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_8,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_footer(text=f"Poll ends in {x} hours")
         polle.set_thumbnail(
@@ -155,7 +258,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option7:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_7,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url=ctx.author.avatar_url)
@@ -174,7 +277,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option6:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_6,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url=ctx.author.avatar_url)
@@ -192,7 +295,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option5:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_5,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url=ctx.author.avatar_url)
@@ -209,7 +312,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option4:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_4,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url=ctx.author.avatar_url)
@@ -226,7 +329,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       elif option3:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_3,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url="https://5.imimg.com/data5/CR/NA/II/SELLER-55766215/designer-garden-lighting-pole-500x500.jpg")
@@ -242,7 +345,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
       else:
         polle = discord.Embed(title=question,
                           description=poll_desc_if_2,
-                          color=discord.Color.from_rgb(132, 0, 255)
+                          color=discord.Color.from_rgb(252, 152, 3)
                           )
         polle.set_thumbnail(
             url=ctx.author.avatar_url)
@@ -479,24 +582,6 @@ async def _reddit(ctx, *, arg=None):
     else:
         await ctx.send("usage: `~~reddit {subreddit}`")
 
-
-
-help_desc = "Under Dev :/"
-
-
-@slash.slash(
-    name="help",
-    description="Displays the Basic Commands",
-    guild_ids=__GID__
-)
-async def help(ctx: SlashContext):
-    help = discord.Embed(title="Commands",
-                         #description="Hi there! My prefix is `=`",
-                         description = help_desc,
-                         color=discord.Color.from_rgb(73, 131, 179))
-    help.add_field(name="Moderation", value=help_desc)
-    await ctx.send(embed=help)
-
     
 @client.command()
 async def editrules(ctx, msg_id = None, channel: discord.TextChannel = None, *, args=None):
@@ -547,5 +632,6 @@ client.load_extension("cogs.welcome")
 client.load_extension("cogs.music")
 client.load_extension("cogs.reminder")
 client.load_extension("cogs.giveaway")
-client.load_extension("cogs.image")
+client.load_extension("cogs.admin")
+client.load_extension("cogs.meta")
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
