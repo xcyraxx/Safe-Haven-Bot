@@ -24,21 +24,21 @@ class Log(Cog):
     @Cog.listener()
     async def on_user_update(self, before, after):
         if before.name != after.name:
-            embed = Embed(title="Member Update",
-             description=f"{after.name}#{after.discriminator}'s Username was changed",
+            embed = Embed(
+             description=f"{after.mention} updated their username.",
               color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
-
-            fields = [("Before", before.name, False),
-                      ("After", after.name, False)]
-
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
+            embed.add_field(name="New Name", value=after.name, inline=False)
+            embed.add_field(name="Old Name", value=before.name, inline=False)
+            embed.add_field(name="ID", value=f"```ini\nUser = {after.id}\n```", inline=False)
+            embed.set_author(name=f"{after.name}#{after.discriminator}", icon_url=after.avatar_url)
+            embed.set_thumbnail(url=after.avatar_url)
             await self.channel.send(embed=embed)
+            
 
         if before.avatar_url != after.avatar_url:
             embed = Embed(title="Member Update",
-             description=f"{after.name}#{after.discriminator}'s Avatar was changed",
+             description=f"{after.mention}\'s Avatar was changed",
               color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
 
@@ -47,6 +47,8 @@ class Log(Cog):
 
             for name, value, inline in fields:
                 embed.add_field(name=name, value=value, inline=inline)
+            embed.set_thumbnail(url=before.avatar_url)
+            embed.set_image(url=after.avatar_url)
             await self.channel.send(embed=embed)
 
     @Cog.listener()
