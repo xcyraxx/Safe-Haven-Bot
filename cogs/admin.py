@@ -5,6 +5,7 @@ from discord.ext.commands.cog import Cog
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
 from discord_slash.utils.manage_commands import create_option
+import asyncio
 
 
 __GID__ = [869849123963162635, 846609621429780520]
@@ -129,6 +130,168 @@ class Admin(commands.Cog):
             description="Select Category for commands.",
             color=discord.Color.from_rgb(73, 131, 179))
         await ctx.send(embed = bot_help, components = [action_row])
+
+    @cog_ext.cog_slash(name="lock", description="Lock a channel", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="channel",
+                 description="Choose channel to lock down.",
+                 option_type=7,
+                 required=False)
+    ])
+    async def command_lock(self, ctx: SlashContext, channel):
+        if ctx.author.guild_permissions.manage_roles:
+            "Locks a channel"
+            await channel.set_permissions(ctx.guild.default_role, send_messages=False)
+            await ctx.send(f"Locked {channel.mention}")
+        else:
+            await ctx.send("You don't have permission to do that.")
+    #unlock channel
+    @cog_ext.cog_slash(name="unlock", description="Unlock a channel", guild_ids=__GID__,
+    options=[
+                create_option(
+                    name="channel",
+                    description="Choose channel to unlock.",
+                    option_type=7,
+                    required=False)
+    ])
+    async def command_unlock(self, ctx: SlashContext, channel):
+        if ctx.author.guild_permissions.manage_roles:
+            await channel.set_permissions(ctx.guild.default_role, send_messages=True)
+            await ctx.send(f"Unlocked {channel.mention}")
+        else:
+            await ctx.send("You don't have permission to do that.")
+
+    #unban user
+    @cog_ext.cog_slash(name="unban", description="Unban a user", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="member",
+                 description="User in user#0000 format",
+                 option_type=3,
+                 required=True,
+               )
+             ])
+    async def unban(ctx, *, member):
+        banned_users = await ctx.guild.bans()
+        
+        member_name, member_discriminator = member.split('#')
+        for ban_entry in banned_users:
+            user = ban_entry.user
+            
+            if (user.name, user.discriminator) == (member_name, member_discriminator):
+                await ctx.guild.unban(user)
+                await ctx.channel.send(f"Unbanned: {user.mention}")
+            else:
+                await ctx.channel.send(f"Could not find user: {member}")
+
+    @cog_ext.cog_slash(name="purge", description="Purge messages", guild_ids=__GID__,
+    options=[
+                create_option(
+                    name="amount",
+                    description="Amount of messages to purge",
+                    option_type=3,
+                    required=True)
+    ])
+    async def purge(self, ctx, amount):
+        await ctx.defer()
+        if ctx.author.guild_permissions.manage_messages:
+            await ctx.channel.purge(limit=int(amount))
+            await ctx.send(f"Purged {amount} messages")
+        else:
+            await ctx.send("You don't have permission to do that.")
+
+    @cog_ext.cog_slash(name="kick", description="Kick a user", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="member",
+                 description="Select user to ban.",
+                 option_type=6,
+                 required=True,
+               ),
+               create_option(
+                    name="reason",
+                    description="Reason for ban.",
+                    option_type=3,
+                    required=False
+               )
+             ])
+    async def kick(self, ctx, member, reason=None):
+        await ctx.defer()
+        if ctx.author.guild_permissions.kick_members:
+            await ctx.channel.send(f"Kicked {member.mention}")
+            await member.kick(reason=reason)
+        else:
+            await ctx.send("You don't have permission to do that.")
+
+   #temporary mute
+    @cog_ext.cog_slash(name="temp-mute", description="Temporary mute a user", guild_ids=__GID__,
+    options=[
+                create_option(
+                    name="member",
+                    description="Select user to mute.",
+                    option_type=6,
+                    required=True,
+                ),
+                create_option(
+                    name="time",
+                    description="Time in minutes to mute.",
+                    option_type=3,
+                    required=True
+                ),
+                create_option(
+                    name="reason",
+                    description="Reason for mute.",
+                    option_type=3,
+                    required=False
+                )
+            ])
+    async def temp_mute(self, ctx, member, time, reason=None):
+        if ctx.author.guild_permissions.manage_roles:
+            mutedRole = discord.utils.get(ctx.guild.roles, name="Muted")
+            if mutedRole is None:
+                mutedRole = await ctx.guild.create_role(name="Muted")
+                for channel in ctx.guild.text_channels:
+                    await channel.set_permissions(mutedRole, send_messages=False)
+            await member.add_roles(mutedRole, reason=reason)
+            await ctx.channel.send(f"Muted {member.mention}")
+            await asyncio.sleep(int(time) * 60)
+            await member.remove_roles(mutedRole, reason=reason)
+            await ctx.channel.send(f"Unmuted {member.mention}")
+        else:
+            await ctx.send("You don't have permission to do that.")
+
+    #temporary ban
+    @cog_ext.cog_slash(name="temp-ban", description="Temporary ban a user", guild_ids=__GID__,
+    options=[
+                create_option(
+                    name="member",
+                    description="Select user to ban.",
+                    option_type=6,
+                    required=True,
+                ),
+                create_option(
+                    name="time",
+                    description="Time in minutes to ban.",
+                    option_type=3,
+                    required=True
+                ),
+                create_option(
+                    name="reason",
+                    description="Reason for ban.",
+                    option_type=3,
+                    required=False
+                )
+            ])
+    async def temp_ban(self, ctx, member, time, reason=None):
+        if ctx.author.guild_permissions.ban_members:
+            await member.ban(reason=reason)
+            await ctx.channel.send(f"Banned {member.mention}.")
+            await asyncio.sleep(int(time) * 60)
+            await ctx.guild.unban(member)
+            await ctx.channel.send(f"Unbanned {member.mention}.")
+        else:
+            await ctx.send("You don't have permission to do that.")
 
 def setup(bot):
     "Setup command for the bot"

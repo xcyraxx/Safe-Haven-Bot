@@ -43,6 +43,17 @@ MOD_HELP = """
     **`mute`**\nMute a user.
 
     **`ban`**\nBan a user from the Server.
+
+    **`lock`**\nLock a channel.
+
+    **`unlock`**\nUnlock a channel.
+
+    **`purge`**\nPurge a channel.
+
+    **`temp-mute`**\nTemporarily mute a user.
+
+    **`temp-ban`**\nTemporarily ban a user.
+
     """
 
 MUSIC_HELP = """
@@ -117,17 +128,21 @@ async def on_component(ctx: ComponentContext):
         description = MUSIC_HELP,
         color=discord.Color.from_rgb(255, 115, 0)
     )
+    music.set_thumbnail(url=ctx.guild.icon_url)
+
     mods = discord.Embed(
         title = "Safe Haven Help",
         description = MOD_HELP,
         color=discord.Color.from_rgb(255, 115, 0)
     )
+    mods.set_thumbnail(url=ctx.guild.icon_url)
     
     other = discord.Embed(
         title = "Safe Haven Help",
         description = OTHER_HELP,
         color=discord.Color.from_rgb(255, 115, 0)
     )
+    other.set_thumbnail(url=ctx.guild.icon_url)
     
     if 'm00sik' in ctx.selected_options:
         await ctx.edit_origin(embed = music)

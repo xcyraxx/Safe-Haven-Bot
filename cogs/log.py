@@ -47,29 +47,26 @@ class Log(Cog):
     @Cog.listener()
     async def on_member_update(self, before, after):
         if before.display_name != after.display_name:
-            embed = Embed(title="Member Update",
-             description="Nickname was changed",
+            embed = Embed(
+             description=f"{after.mention} updated their nickname.",
               color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
-
-            fields = [("Before", before.display_name, False),
-                      ("After", after.display_name, False)]
-
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
+            embed.add_field(name="New Name", value=after.display_name, inline=False)
+            embed.add_field(name="Old Name", value=before.display_name, inline=False)
+            embed.add_field(name="ID", value=f"```ini\nUser = {after.id}\n```", inline=False)
+            embed.set_author(name=f"{after.name}#{after.discriminator}", icon_url=after.avatar_url)
             await self.channel.send(embed=embed)
 
         elif before.roles != after.roles:
-            embed = Embed(title="Member Update",
-             description=f"{after.name}#{after.discriminator}'s Roles were updated",
-              color=discord.Color.from_rgb(73, 131, 179),
-               timestamp = datetime.utcnow())
-            
-            fields = [("Before", ", ".join([r.mention for r in before.roles]), False),
-                      ("After", ", ".join([r.mention for r in after.roles]), False)]
-
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
+            embed = Embed(
+                description=f"{after.mention} updated their roles.",
+                color=discord.Color.from_rgb(73, 131, 179),
+                timestamp = datetime.utcnow()
+                )
+            embed.add_field(name="New Roles", value=after.roles, inline=False)
+            embed.add_field(name="Old Roles", value=before.roles, inline=False)
+            embed.add_field(name="ID", value=f"```ini\nUser = {after.id}\n```", inline=False)
+            embed.set_author(name=f"{after.name}#{after.discriminator}", icon_url=after.avatar_url)
             await self.channel.send(embed=embed)
 
     @Cog.listener()
@@ -87,6 +84,8 @@ class Log(Cog):
                 embed.add_field(name="ID", value=f"```ini\nUser = {after.author.id}\nMessage = {after.id}\n```", inline=False)
                 embed.set_author(name=after.author.name, icon_url=after.author.avatar_url)  
                 await self.channel.send(embed=embed)
+
+            
 
     @Cog.listener()
     async def on_message_delete(self, message):
@@ -119,6 +118,65 @@ class Log(Cog):
                timestamp = datetime.utcnow())
         print(channel.overwrites_for(self.everyone))
         await self.channel.send(embed=embed) 
+
+    @Cog.listener()
+    async def on_guild_channel_update(self, before, after):
+        if before.name != after.name:
+            embed = Embed(
+             description=f"Text Channel was updated ({after.name})",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Created on", value=f"<t:{int(after.created_at.timestamp())}:F>", inline=False)
+            embed.add_field(name="Name", value=f"Previous: {before.name}\n Now: {after.name}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nChannel = {after.id}\n```", inline=False)
+
+            await self.channel.send(embed=embed)
+
+        elif before.category != after.category:
+            embed = Embed(
+             description=f"Text Channel was updated ({after.name})",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Created on", value=f"<t:{int(after.created_at.timestamp())}:F>", inline=False)
+            embed.add_field(name="Category", value=f"Previous: {before.category}\n Now: {after.category}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nChannel = {after.id}\n```", inline=False)
+
+            await self.channel.send(embed=embed)
+
+        elif before.position != after.position:
+            embed = Embed(
+             description=f"Text Channel was updated ({after.name})",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Created on", value=f"<t:{int(after.created_at.timestamp())}:F>", inline=False)
+            embed.add_field(name="Position", value=f"Previous: {before.position}\n Now: {after.position}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nChannel = {after.id}\n```", inline=False)
+
+            await self.channel.send(embed=embed)
+
+        elif before.permissions_for(self.everyone) != after.permissions_for(self.everyone):
+            embed = Embed(
+             description=f"Text Channel was updated ({after.name})",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Created on", value=f"<t:{int(after.created_at.timestamp())}:F>", inline=False)
+            embed.add_field(name="Permissions", value=f"Previous: {before.permissions_for(self.everyone)}\n Now: {after.permissions_for(self.everyone)}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nChannel = {after.id}\n```", inline=False)
+
+            await self.channel.send(embed=embed)
+
+        elif before.topic != after.topic:
+            embed = Embed(
+             description=f"Text Channel was updated ({after.name})",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Created on", value=f"<t:{int(after.created_at.timestamp())}:F>", inline=False)
+            embed.add_field(name="Topic", value=f"Previous: {before.topic}\n Now: {after.topic}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nChannel = {after.id}\n```", inline=False)
+
+            await self.channel.send(embed=embed)
+
+        
 
 def setup(bot):
     bot.add_cog(Log(bot))

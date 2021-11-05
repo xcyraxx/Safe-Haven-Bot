@@ -58,7 +58,7 @@ class Meta(commands.Cog):
         info.add_field(name="Python Version",
                        value="Python 3.9.6", inline=True)
         info.add_field(name="OS", value="Stack v2.7.3")
-        info.add_field(name="Code Lines written", value="492")
+        info.add_field(name="Code Lines written", value="2408")
         info.add_field(name="Uptime", value=uptime, inline=False)
         info.add_field(name="Top Role in this Server", value=user.top_role)
         info.add_field(
@@ -119,6 +119,14 @@ class Meta(commands.Cog):
         info.set_image(url=user.avatar_url)
         info.set_footer(text=f'ID: {user.id}')
         await ctx.send(embed=info)
+
+    @cog_ext.cog_slash(name="ping", description="Get the bot's ping", guild_ids=__GUILD_ID__)
+    async def command_ping(self, ctx: SlashContext):
+        "Returns the bot's ping"
+
+        await ctx.send(f"Pong! {round(self.client.latency * 1000)}ms")
+    
+    
         
 def setup(bot):
     "Setup command for the bot"
