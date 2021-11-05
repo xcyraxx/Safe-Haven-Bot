@@ -95,9 +95,10 @@ class Music(commands.Cog):
 
         if ctx.voice_client:
             await ctx.voice_client.disconnect()
-            await ctx.send("https://tenor.com/view/aight-imma-head-out-im-out-this-bitch-bye-gif-15194343")
+            hu = await ctx.send("https://tenor.com/view/aight-imma-head-out-im-out-this-bitch-bye-gif-15194343")
+            await hu.delete(delay=2)
         else:
-            await ctx.send("I'm not connected to Voice Channel.")
+            await ctx.send("I'm not connected to a Voice Channel.")
 
     # FIX: Low quality code
     @cog_ext.cog_slash(name="play", description="Play any song by name", guild_ids=__GUILD_ID__)
