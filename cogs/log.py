@@ -114,22 +114,25 @@ class Log(Cog):
 
         
     @Cog.listener()
-    async def on_guild_channel_delete(self, channel):
-        embed = Embed(title=f"Channel deleted",
-             description=f"**Name: **{channel.name}\n **Category: **{channel.category}",
+    async def on_channel_delete(self, channel):
+        embed = Embed(
+             description=f"Channel deleted: {channel.mention}",
              color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
-        await self.channel.send(embed=embed) 
+        embed.add_field(name="ID", value=f"```ini\nChannel = {channel.id}\n```", inline=False)
+        embed.set_author(name=channel.name, icon_url=channel.guild.icon_url)
+        await self.channel.send(embed=embed)
 
 
     @Cog.listener()
     async def on_guild_channel_create(self, channel):
-        embed = Embed(title=f"Voice Channel created",
-             description=f"**Name: **{channel.name}\n **Category: **{channel.category}\n\n**Role override for @everyone**\n",
+        embed = Embed(
+             description=f"Channel created: {channel.mention}",
              color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
-        print(channel.overwrites_for(self.everyone))
-        await self.channel.send(embed=embed) 
+        embed.add_field(name="ID", value=f"```ini\nChannel = {channel.id}\n```", inline=False)
+        embed.set_author(name=channel.name, icon_url=channel.guild.icon_url)
+        await self.channel.send(embed=embed)
 
     @Cog.listener()
     async def on_guild_channel_update(self, before, after):
