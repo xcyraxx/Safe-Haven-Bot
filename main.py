@@ -9,6 +9,7 @@ import praw
 from discord_slash import SlashCommand, SlashContext
 from discord_slash.utils.manage_components import wait_for_component, ComponentContext
 from discord_slash.utils.manage_commands import create_option
+import os
 
 
 intents = discord.Intents.default()
@@ -98,6 +99,9 @@ Ask me any yes/no questions.
 
 **`anonymous_confession`**:
 Non-slash cmd, run it like `=ancn` in the server.
+
+**`avatar`**:
+Get the avatar of a user.
 """
 
 @client.event
@@ -695,11 +699,12 @@ async def embed(ctx, titlee, *, descriptions):
   await ctx.send(embed=template)
   await ctx.message.delete()
 
-client.load_extension("cogs.log")
-client.load_extension("cogs.welcome")
-client.load_extension("cogs.music")
-client.load_extension("cogs.reminder")
-client.load_extension("cogs.giveaway")
-client.load_extension("cogs.admin")
-client.load_extension("cogs.meta")
+#load all cogs
+for file in os.listdir("./cogs"): 
+    if file.endswith(".py"):
+        name = file[:-3] 
+        client.load_extension(f"cogs.{name}") 
+
+
+
 client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')

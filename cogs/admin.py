@@ -83,7 +83,7 @@ class Admin(commands.Cog):
                )
              ])
     async def mute(self, ctx, member, reason=None):
-        #await ctx.defer()
+        await ctx.defer()
         if ctx.author.guild_permissions.manage_roles:
             mod_channel = self.client.get_channel(869849124537778214)
             guild = ctx.guild
