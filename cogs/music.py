@@ -22,7 +22,7 @@ import validators
 from discord_slash import SlashCommand, cog_ext, SlashContext
 import pafy
 
-__GUILD_ID__ = [846609621429780520, 893122121805496371]
+__GUILD_ID__ = [846609621429780520, 893122121805496371, 869849123963162635]
 PREFIX = os.environ.get("PREFIX")
 
 
