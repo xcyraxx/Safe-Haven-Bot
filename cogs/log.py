@@ -17,6 +17,8 @@ class Log(Cog):
     async def on_ready(self):
         print('logs up!')
         self.channel=self.bot.get_channel(869849124537778214)
+        self.plus = self.bot.get_emoji(906285613295235092)
+        self.minus = self.bot.get_emoji(906285811417354340)
         
     
     @Cog.listener()
@@ -36,12 +38,15 @@ class Log(Cog):
 
         if before.avatar_url != after.avatar_url:
             embed = Embed(title="Member Update",
-            description=f"{after.name}#{after.discriminator} changed their avatar (New Avatar Below)",
-            color=discord.Color.from_rgb(73, 131, 179),
-            timestamp = datetime.utcnow())
-            embed.set_thumbnail(url=before.avatar_url)
-            embed.set_image(url=after.avatar_url)
+             description=f"{after.name}#{after.discriminator}'s Avatar was changed",
+              color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
 
+            fields = [("Before", before.avatar_url, False),
+                      ("After", after.avatar_url, False)]
+
+            for name, value, inline in fields:
+                embed.add_field(name=name, value=value, inline=inline)
             await self.channel.send(embed=embed)
 
     @Cog.listener()
@@ -59,13 +64,20 @@ class Log(Cog):
 
         elif before.roles != after.roles:
             embed = Embed(
-                description=f"{after.mention} updated their roles.",
+                description=f"{after.mention}\'s roles were updated ",
                 color=discord.Color.from_rgb(73, 131, 179),
                 timestamp = datetime.utcnow()
                 )
-            embed.add_field(name="New Roles", value=after.roles, inline=False)
-            embed.add_field(name="Old Roles", value=before.roles, inline=False)
-            embed.add_field(name="ID", value=f"```ini\nUser = {after.id}\n```", inline=False)
+            changed_role_set = set(before.roles) ^ set(after.roles)
+            if len(changed_role_set) > 0:
+                changed_role = next(iter(changed_role_set))
+                #and then answer
+            if changed_role in after.roles:
+                embed.add_field(name="Role Added", value=f"{self.plus} {changed_role.mention}", inline=False)
+            else:
+                embed.add_field(name="Role Removed", value=f"{self.minus} {changed_role.mention}", inline=False)
+            
+            embed.add_field(name="ID", value=f"```ini\nUser = {after.id}\nRole = {changed_role.id}\n```", inline=False)
             embed.set_author(name=f"{after.name}#{after.discriminator}", icon_url=after.avatar_url)
             await self.channel.send(embed=embed)
 
