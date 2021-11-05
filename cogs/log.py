@@ -41,12 +41,6 @@ class Log(Cog):
              description=f"{after.mention}\'s Avatar was changed",
               color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
-
-            fields = [("Before", before.avatar_url, False),
-                      ("After", after.avatar_url, False)]
-
-            for name, value, inline in fields:
-                embed.add_field(name=name, value=value, inline=inline)
             embed.set_thumbnail(url=before.avatar_url)
             embed.set_image(url=after.avatar_url)
             await self.channel.send(embed=embed)
