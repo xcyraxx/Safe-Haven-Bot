@@ -8,7 +8,8 @@ import asyncio
 import praw
 from discord_slash import SlashCommand, SlashContext
 from discord_slash.utils.manage_components import wait_for_component, ComponentContext
-from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
+from discord_slash.utils.manage_commands import create_option
+
 
 intents = discord.Intents.default()
 intents.members = True
@@ -164,23 +165,85 @@ async def on_message(message):
     await client.process_commands(message)
     
     
-@client.command()
-async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=None, option4=None, option5=None, option6=None, option7=None, option8=None):
+@slash.slash(name="poll", description="Make a poll", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="question",
+                 description="Question to be asked",
+                 option_type=3,
+                 required=True,
+               ),
+               create_option(
+                 name="time",
+                 description="Time in hours",
+                 option_type=3,
+                 required=True,
+               ),
+               create_option(
+                 name="option1",
+                 description="First Option",
+                 option_type=3,
+                 required=True,
+               ),
+               create_option(
+                 name="option2",
+                 description="Second Option",
+                 option_type=3,
+                 required=True,
+               ),
+               create_option(
+                 name="option3",
+                 description="Third Option",
+                 option_type=3,
+                 required=False,
+               ),
+               create_option(
+                 name="option4",
+                 description="Fourth Option",
+                 option_type=3,
+                 required=False,
+               ),
+               create_option(
+                 name="option5",
+                 description="Fifth Option",
+                 option_type=3,
+                 required=False,
+               ),
+               create_option(
+                 name="option6",
+                 description="Sixth Option",
+                 option_type=3,
+                 required=False,
+               ),
+               create_option(
+                 name="option7",
+                 description="Seventh Option",
+                 option_type=3,
+                 required=False,
+               ),
+               create_option(
+                    name="option8",
+                    description="Eighth Option",
+                    option_type=3,
+                    required=False,
+                ),
+             ])
+async def poll(ctx, time, question, option1, option2, option3=None, option4=None, option5=None, option6=None, option7=None, option8=None):
     poll_desc_if_2 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}
     """
     poll_desc_if_3 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
     🇨 {option3}
     """
     poll_desc_if_4 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
@@ -188,7 +251,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
     🇩 {option4}
     """
     poll_desc_if_5 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
@@ -197,7 +260,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
     🇪 {option5}
     """
     poll_desc_if_6 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
@@ -207,7 +270,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
     🇫 {option6}
     """
     poll_desc_if_7 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
@@ -218,7 +281,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
     🇬 {option7}
     """
     poll_desc_if_8 = f"""
-    ⏱️ The poll ends in **{x} hours**
+    ⏱️ The poll ends in **{time} hours**
 
     🇦 {option1}\n
     🇧 {option2}\n
@@ -239,9 +302,9 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_8,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
-        polle.set_footer(text=f"Poll ends in {x} hours")
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
@@ -252,7 +315,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
         await brr.add_reaction('🇬')
         await brr.add_reaction('🇭')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(int(hour))
         await ctx.send("Time up! The poll is now closed.")
       elif option7:
@@ -260,8 +323,9 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_7,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
@@ -271,7 +335,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
         await brr.add_reaction('🇫')
         await brr.add_reaction('🇬')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(int(hour))
         await ctx.send("Time up! The poll is now closed.")
       elif option6:
@@ -279,8 +343,9 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_6,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
@@ -289,7 +354,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
         await brr.add_reaction('🇪')
         await brr.add_reaction('🇫')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(hour)
         await ctx.send("Time up! The poll is now closed.")
       elif option5:
@@ -297,8 +362,9 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_5,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
@@ -306,7 +372,7 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
         await brr.add_reaction('🇩')
         await brr.add_reaction('🇪')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(int(hour))
         await ctx.send("Time up! The poll is now closed.")
       elif option4:
@@ -314,15 +380,16 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_4,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
         await brr.add_reaction('🇨')
         await brr.add_reaction('🇩')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(int(hour))
         await ctx.send("Time up! The poll is now closed.")
         
@@ -331,14 +398,15 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_3,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url="https://5.imimg.com/data5/CR/NA/II/SELLER-55766215/designer-garden-lighting-pole-500x500.jpg")
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
         await brr.add_reaction('🇨')
         await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(hour)
         await ctx.send("Time up! The poll is now closed.")
         
@@ -347,19 +415,19 @@ async def poll(ctx, x=None, question=None, option1=None, option2=None, option3=N
                           description=poll_desc_if_2,
                           color=discord.Color.from_rgb(252, 152, 3)
                           )
+        polle.set_footer(text=f"Poll started by {ctx.author.name}#{ctx.author.discriminator}")
         polle.set_thumbnail(
-            url=ctx.author.avatar_url)
+            url=ctx.guild.icon_url)
         brr = await ctx.send(embed=polle)
         await brr.add_reaction('🇦')
         await brr.add_reaction('🇧')
-        await ctx.message.delete()
-        hour = int(x)*3600
+        hour = int(time)*3600
         await asyncio.sleep(int(hour))
         await ctx.send("Time up! The poll is now closed.")
     else:
         await ctx.send("Sorry you don't have permission to run that command.")
 
-    
+
 @client.command(name='ancn')
 async def anon_conf(ctx, arg=None):
     brr = ctx.author.id
@@ -394,7 +462,7 @@ async def anon_conf(ctx, arg=None):
                                                description=f"{msg.author} was the author.")
                     vent_channel = client.get_channel(869849125087240204)
                     await morsh.send(embed=embed)
-        except asyncio.TimeoutErrorz:
+        except asyncio.TimeoutError:
             await ctx.send("Ouch you ignored me :(")
    
 
@@ -549,7 +617,7 @@ async def _reddit(ctx, *, arg=None):
         memes_submissions = reddit.subreddit(f'{arg}').hot()
         post_to_pick = random.randint(1, 50)
         for i in range(0, post_to_pick):
-            mango = next(x for x in memes_submissions if not x.stickied)
+            mango = next(time for time in memes_submissions if not time.stickied)
             titlee = mango.title
             updoot = mango.score
 
