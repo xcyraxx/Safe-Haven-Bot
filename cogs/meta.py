@@ -14,7 +14,7 @@ from discord.ext.commands import Greedy
 from discord.enums import ChannelType
 from discord.ext.commands.core import guild_only
 from discord_slash import SlashCommand, cog_ext, SlashContext
-from discord.ext.commands import command, has_permissions, bot_has_permissions
+from discord_slash.utils.manage_commands import create_option
 from discord.ext import commands
 
 __GUILD_ID__ = [846609621429780520, 869849123963162635]
@@ -95,6 +95,30 @@ class Meta(commands.Cog):
                           description=f"{desc}",
                           color=discord.Color.from_rgb(73, 131, 179))
         await ctx.send(embed=template)
+
+    @cog_ext.cog_slash(name="avatar", description="Get a user's avatar", guild_ids=__GUILD_ID__, 
+    options=[
+               create_option(
+                 name="user",
+                 description="Select user to get avatar",
+                 option_type=6,
+                 required=False)
+    ])
+    async def command_avatar(self, ctx: SlashContext, user=None):
+        "Returns the avatar of the user"
+        if user:
+            pass
+        else:
+            user = ctx.author
+        info = discord.Embed(
+            title=f"{user.display_name}'s Avatar",
+            color=discord.Color.from_rgb(3, 252, 252)
+        )
+        info.set_author(
+            name=f"{user.display_name}#{user.discriminator}", icon_url=user.avatar_url)
+        info.set_image(url=user.avatar_url)
+        info.set_footer(text=f'ID: {user.id}')
+        await ctx.send(embed=info)
         
 def setup(bot):
     "Setup command for the bot"
