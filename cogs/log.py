@@ -1,7 +1,10 @@
+from os import name
 import discord
+from discord import channel
 from discord.ext import commands
 from discord.ext.commands import Cog
 from discord import Embed, Forbidden
+import time
 from datetime import datetime
 import discord
 from discord.utils import get
@@ -73,21 +76,28 @@ class Log(Cog):
     async def on_message_edit(self, before, after):
         if not after.author.bot:
             if before.content != after.content:
-                embed = Embed(title=f"Message Edited in #{after.channel}",
-             description=f"**Before:** {before.content} \n **After: ** {after.content}",
-             color=discord.Color.from_rgb(73, 131, 179),
-               timestamp = datetime.utcnow())
-                embed.set_author(name=after.author.name, icon_url=after.author.avatar_url)
-
+                embed = Embed(
+            description=f"**{after.author.name}#{after.author.discriminator}** updated their message in: {after.channel}",
+            color=discord.Color.from_rgb(73, 131, 179),
+            timestamp = datetime.utcnow()
+            )
+                embed.add_field(name="Channel", value=f"{after.channel.mention}({after.channel})\n[Go to Message]({after.jump_url})", inline=False)
+                embed.add_field(name="Now", value=f"{after.content}", inline=False)
+                embed.add_field(name="Previous", value=f"{before.content}", inline=False)
+                embed.add_field(name="ID", value=f"```ini\nUser = {after.author.id}\nMessage = {after.id}\n```", inline=False)
+                embed.set_author(name=after.author.name, icon_url=after.author.avatar_url)  
                 await self.channel.send(embed=embed)
 
     @Cog.listener()
     async def on_message_delete(self, message):
         if not message.author.bot:
-            embed = Embed(title=f"Message Deleted in #{message.channel}",
-             description=f"{message.content}",
+            embed = Embed(
+             description=f"Message deleted in {message.channel.mention}",
              color=discord.Color.from_rgb(73, 131, 179),
                timestamp = datetime.utcnow())
+            embed.add_field(name="Content", value=f"{message.content}", inline=False)
+            embed.add_field(name="Date", value=f"<t:{int(time.time())}:F>", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nUser = {message.author.id}\nMessage = {message.id}\n```", inline=False)
             embed.set_author(name=message.author.name, icon_url=message.author.avatar_url)
             await self.channel.send(embed=embed)   
 
@@ -109,7 +119,6 @@ class Log(Cog):
                timestamp = datetime.utcnow())
         print(channel.overwrites_for(self.everyone))
         await self.channel.send(embed=embed) 
-            
 
 def setup(bot):
     bot.add_cog(Log(bot))
