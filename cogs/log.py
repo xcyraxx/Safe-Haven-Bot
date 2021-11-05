@@ -188,6 +188,73 @@ class Log(Cog):
 
             await self.channel.send(embed=embed)
 
+    @Cog.listener()
+    async def on_voice_state_update(self, member, before, after):
+        if before.channel != after.channel:
+            if after.channel is None:
+                embed = Embed(
+                 description=f"{member.mention} left {before.channel.name}",
+                 color=discord.Color.from_rgb(73, 131, 179),
+                   timestamp = datetime.utcnow())
+                embed.add_field(name="Date", value=f"<t:{int(time.time())}:F>", inline=False)
+                embed.add_field(name="ID", value=f"```ini\nUser = {member.id}\nChannel = {before.channel.id}\n```", inline=False)
+                await self.channel.send(embed=embed)
+
+            else:
+                embed = Embed(
+                 description=f"{member.mention} joined {after.channel.name}",
+                 color=discord.Color.from_rgb(73, 131, 179),
+                   timestamp = datetime.utcnow())
+                embed.add_field(name="Date", value=f"<t:{int(time.time())}:F>", inline=False)
+                embed.add_field(name="ID", value=f"```ini\nUser = {member.id}\nChannel = {after.channel.id}\n```", inline=False)
+                await self.channel.send(embed=embed)
+    
+    @Cog.listener()
+    async def on_role_create(self, role):
+        embed = Embed(
+         description=f"Role created",
+         color=discord.Color.from_rgb(73, 131, 179),
+           timestamp = datetime.utcnow())
+        embed.add_field(name="Name", value=f"{role.name}", inline=False)
+        embed.add_field(name="ID", value=f"```ini\nRole = {role.id}\n```", inline=False)
+        await self.channel.send(embed=embed)
+    
+    @Cog.listener()
+    async def on_role_delete(self, role):
+        embed = Embed(
+         description=f"Role deleted",
+         color=discord.Color.from_rgb(73, 131, 179),
+           timestamp = datetime.utcnow())
+        embed.add_field(name="Name", value=f"{role.name}", inline=False)
+        embed.add_field(name="ID", value=f"```ini\nRole = {role.id}\n```", inline=False)
+        await self.channel.send(embed=embed)
+
+    @Cog.listener()
+    async def on_guild_role_update(self, before, after):
+        if before.name != after.name:
+            embed = Embed(
+             title=f"Role \"{after.name}\" was updated",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+            embed.add_field(name="Name", value=f"Previous: {before.name}\n Now: {after.name}", inline=False)
+            embed.add_field(name="ID", value=f"```ini\nRole = {after.id}\n```", inline=False)
+            await self.channel.send(embed=embed)
+
+        elif before.permissions != after.permissions:
+            embed = Embed(
+             title=f"Role \"{after.name}\" was updated",
+             color=discord.Color.from_rgb(73, 131, 179),
+               timestamp = datetime.utcnow())
+
+            changed_perm_set = set(before.permissions) ^ set(after.permissions)
+            if len(changed_perm_set) > 0:
+                changed_perm = next(iter(changed_perm_set))
+                #and then answer
+            if changed_perm in after.permissions:
+                embed.add_field(name="Permission Added", value=f"{self.plus} {changed_perm[0]}", inline=False)
+            else:
+                embed.add_field(name="Permission Removed", value=f"{self.minus} {changed_perm[0]}", inline=False)
+            await self.channel.send(embed=embed)
         
 
 def setup(bot):
