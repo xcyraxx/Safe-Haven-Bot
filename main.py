@@ -38,7 +38,7 @@ mod_channel = client.get_channel(869849124537778214)
 MOD_HELP = """
     **`kick`**\nKick a user from the Server.
 
-    **`mute`**\nMute a user (Currently not working due to discord API issue)
+    **`mute`**\nMute a user.
 
     **`ban`**\nBan a user from the Server.
     """
@@ -110,18 +110,18 @@ async def on_component(ctx: ComponentContext):
     music = discord.Embed(
         title = "Safe Haven Help",
         description = MUSIC_HELP,
-        color=discord.Color.from_rgb(3, 252, 252)
+        color=discord.Color.from_rgb(255, 115, 0)
     )
     mods = discord.Embed(
         title = "Safe Haven Help",
         description = MOD_HELP,
-        color=discord.Color.from_rgb(3, 252, 252)
+        color=discord.Color.from_rgb(255, 115, 0)
     )
     
     other = discord.Embed(
         title = "Safe Haven Help",
         description = OTHER_HELP,
-        color=discord.Color.from_rgb(3, 252, 252)
+        color=discord.Color.from_rgb(255, 115, 0)
     )
     
     if 'm00sik' in ctx.selected_options:

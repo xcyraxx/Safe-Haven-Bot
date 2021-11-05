@@ -4,6 +4,7 @@ from discord.ext import commands
 from discord.ext.commands.cog import Cog
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_components import create_select, create_select_option, create_actionrow
+from discord_slash.utils.manage_commands import create_option
 
 
 __GID__ = [869849123963162635, 846609621429780520]
@@ -18,8 +19,22 @@ class Admin(commands.Cog):
     async def on_ready(self):
         print("Admin up!")
 
-    @cog_ext.cog_slash(name="ban", description="Ban a user from this server.", guild_ids=__GID__)
-    async def ban(self, ctx, user: discord.User, *,reason=None):
+    @cog_ext.cog_slash(name="ban", description="Ban a user from this server.", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="user",
+                 description="Select user to ban.",
+                 option_type=6,
+                 required=True,
+               ),
+               create_option(
+                    name="reason",
+                    description="Reason for ban.",
+                    option_type=3,
+                    required=False
+               )
+             ])
+    async def ban(self, ctx, user, reason=None):
         banned = discord.Embed(
             title = "User Banned",
             description = f"{user.name}#{user.discriminator} was banned by {ctx.author.mention}"
@@ -28,8 +43,22 @@ class Admin(commands.Cog):
         banned.set_thumbnail(url=user.avatar_url)
         await user.ban(reason = reason)
 
-    @cog_ext.cog_slash(name="kick", description="Kick a user from this server.", guild_ids=__GID__)
-    async def kick(self, ctx, user: discord.User, *,reason=None):
+    @cog_ext.cog_slash(name="kick", description="Kick a user from this server.", guild_ids=__GID__,
+    options=[
+               create_option(
+                 name="user",
+                 description="Select user to ban.",
+                 option_type=6,
+                 required=True,
+               ),
+               create_option(
+                    name="reason",
+                    description="Reason for ban.",
+                    option_type=3,
+                    required=False
+               )
+             ])
+    async def kick(self, ctx, user, reason=None):
         kicked = discord.Embed(
             title = "User Kicked",
             description = f"{user.name}#{user.discriminator} was kicked by {ctx.author.mention}"
@@ -38,8 +67,22 @@ class Admin(commands.Cog):
         kicked.set_thumbnail(url=user.avatar_url)
         await user.kick(reason = reason)
 
-    @cog_ext.cog_slash(name="mute", description="Mute a user", guild_ids=__GID__)
-    async def mute(self, ctx, member: discord.Member, *, reason=None):
+    @cog_ext.cog_slash(name="mute", description="Mute a user", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="member",
+                 description="Select user to ban.",
+                 option_type=6,
+                 required=True,
+               ),
+               create_option(
+                    name="reason",
+                    description="Reason for ban.",
+                    option_type=3,
+                    required=False
+               )
+             ])
+    async def mute(self, ctx, member, reason=None):
         #await ctx.defer()
         if ctx.author.guild_permissions.manage_roles:
             mod_channel = self.client.get_channel(869849124537778214)
@@ -85,7 +128,7 @@ class Admin(commands.Cog):
             title="Safe Haven Help",
             description="Select Category for commands.",
             color=discord.Color.from_rgb(73, 131, 179))
-        await ctx.send(hidden=True, embed = bot_help, components = [action_row])
+        await ctx.send(embed = bot_help, components = [action_row])
 
 def setup(bot):
     "Setup command for the bot"

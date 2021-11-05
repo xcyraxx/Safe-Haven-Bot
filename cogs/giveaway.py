@@ -4,6 +4,7 @@ import discord.ext
 import re
 from discord.ext import commands
 import asyncio
+from discord_slash.utils.manage_commands import create_option
 import random
 from discord.ext.commands import Cog
 from discord_slash import SlashCommand, cog_ext, SlashContext
@@ -19,8 +20,16 @@ class Giveaway(commands.Cog):
     async def on_ready(self):
         print('Giveaway up!')
 
-    @commands.command(name="giveaway")
-    async def command_giveaway(self, ctx, channel: discord.TextChannel=None):
+    @cog_ext.cog_slash(name="giveaway", description="Start a giveaway", guild_ids=__GID__, 
+    options=[
+               create_option(
+                 name="channel",
+                 description="Channel to start the giveaway in.",
+                 option_type=7,
+                 required=True,
+               )
+             ])
+    async def command_giveaway(self, ctx, channel):
         if channel:
                 await ctx.send("Enter Giveaway item Name.")
                 item = await self.client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=60)
@@ -30,6 +39,7 @@ class Giveaway(commands.Cog):
                 winners = await self.client.wait_for('message', check=lambda m: m.author == ctx.author, timeout=60)
                 
                 a = re.split(r'(\d+)', time.content)
+                nano = ""
                 if a[2] == 'd':
                     time = int(a[1])*86400
                     nano = "Day(s)"
@@ -69,6 +79,7 @@ class Giveaway(commands.Cog):
 
         else:
             await ctx.send("Specify a channel to run the giveaway in. Usage: `=giveaway #channel`")
+
 
 def setup(bot):
     bot.add_cog(Giveaway(bot))
