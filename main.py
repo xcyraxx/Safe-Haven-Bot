@@ -722,4 +722,4 @@ for file in os.listdir("./cogs"):
 
 
 
-client.run('ODc5NjI0OTcwNDkyMzI1OTM4.YSSclw.H9-hcHYoJOHFZOxln4485_Tlkgc')
+client.run('')
